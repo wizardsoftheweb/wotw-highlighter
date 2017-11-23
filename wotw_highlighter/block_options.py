@@ -7,10 +7,10 @@ class BlockOptions(object):
     """
     def __init__(
             self,
-            from_file='',
-            alternate_title='',
-            vcs_branch='',
-            vcs_link='',
+            from_file=None,
+            alternate_title=None,
+            vcs_branch=None,
+            vcs_link=None,
             linenos=True
         ):
         """The ctor simply assigns defaults"""
