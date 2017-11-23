@@ -74,5 +74,5 @@ class RenderVcsBranchTabUnitTestss(BlockHeaderTestCase):
         """Tests rendering without a branch"""
         self.assertEqual(
             self.header.render_vcs_branch_tab(),
-            ''
+            BlockHeader.RENDER_AN_OPTION_NOT_INCLUDED
         )

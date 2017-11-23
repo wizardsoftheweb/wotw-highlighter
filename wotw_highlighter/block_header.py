@@ -5,6 +5,8 @@ from wotw_highlighter.block_options import BlockOptions
 class BlockHeader(BlockOptions):
     """This class compiles and renders a block's header (if any)"""
 
+    RENDER_AN_OPTION_NOT_INCLUDED = ''
+
     def __init__(self, **kwargs):
         """The ctor simply loads options via BlockOptions"""
         super(BlockHeader, self).__init__(kwargs)
@@ -36,4 +38,4 @@ class BlockHeader(BlockOptions):
         """Renders the VCS branch tab"""
         if self.vcs_branch:
             return self.construct_code_tab(self.vcs_branch)
-        return ''
+        return self.RENDER_AN_OPTION_NOT_INCLUDED
