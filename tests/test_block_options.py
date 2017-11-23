@@ -65,3 +65,16 @@ class ConstructorUnitTests(BlockOptionsTestCase):
         input_args[ignored_option] = self.DEFAULT_VALUE
         self.build_options_with_mock_validate(**input_args)
         self.assertFalse(hasattr(self.block_options, ignored_option))
+
+    def test_validate(self):
+        """Ensures the validate method is called"""
+        self.build_options_with_mock_validate()
+        self.assertEquals(self.mock_validate.call_count, 1)
+
+class ValidateUnitTests(BlockOptionsTestCase):
+    """Tests the empty validate method"""
+
+    def test_nothing_happens_with_base(self):
+        """Ensures nothing happens"""
+        self.build_options()
+        self.assertIsNone(self.block_options.validate())
