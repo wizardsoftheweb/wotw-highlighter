@@ -13,6 +13,8 @@ from wotw_highlighter import BlockOptions
 class BlockOptionsTestCase(unittest.TestCase):
     """Collects common items and defaults across test cases"""
 
+    DEFAULT_VALUE = 'qqq'
+
     def tearDown(self):
         del self.block_options
 
@@ -45,8 +47,6 @@ class BlockOptionsTestCase(unittest.TestCase):
 class ConstructorUnitTests(BlockOptionsTestCase):
     """Tests the constructor"""
 
-    DEFAULT_VALUE = 'qqq'
-
     def test_consumed_options(self):
         """Ensures all valid options can be set"""
         for option in BlockOptions.USED_KWARGS:
@@ -78,3 +78,22 @@ class ValidateUnitTests(BlockOptionsTestCase):
         """Ensures nothing happens"""
         self.build_options()
         self.assertIsNone(self.block_options.validate())
+
+class FullOptionsUnitTests(BlockOptionsTestCase):
+    """Tests full_options"""
+
+    def setUp(self):
+        self.build_options()
+
+    def test_contains_all_options(self):
+        """Ensure it returns all the important options"""
+        returned_options = self.block_options.full_options()
+        for key in BlockOptions.USED_KWARGS:
+            self.assertTrue(returned_options.has_key(key))
+
+    def test_returns_proper_options(self):
+        """Ensure it returns the proper values"""
+        self.assertIsNone(self.block_options.title)
+        self.block_options.title = self.DEFAULT_VALUE
+        returned_options = self.block_options.full_options()
+        self.assertEqual(returned_options['title'], self.DEFAULT_VALUE)

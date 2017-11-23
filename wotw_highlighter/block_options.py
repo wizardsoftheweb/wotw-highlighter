@@ -43,3 +43,10 @@ class BlockOptions(object):
     def validate(self): # pylint: disable=R0201
         """Overriden by children to validate options"""
         return
+
+    def full_options(self):
+        """Compiles a dict with all option values"""
+        options = dict()
+        for option in self.USED_KWARGS:
+            options[option] = getattr(self, option)
+        return options
