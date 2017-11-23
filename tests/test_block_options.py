@@ -11,16 +11,9 @@ class ConstructorUnitTests(unittest.TestCase):
 
     DEFAULT_VALUE = 'qqq'
 
-    def test_valid_options(self):
+    def test_consumed_options(self):
         """Ensures all valid options can be set"""
-        options = [
-            'alternate_title',
-            'from_file',
-            'vcs_branch',
-            'vcs_link',
-            'linenos',
-        ]
-        for option in options:
+        for option in BlockOptions.USED_KWARGS:
             input_args = defaultdict()
             input_args[option] = self.DEFAULT_VALUE
             block_options = BlockOptions(**input_args)
@@ -28,3 +21,11 @@ class ConstructorUnitTests(unittest.TestCase):
                 getattr(block_options, option),
                 self.DEFAULT_VALUE
             )
+
+    def test_ignored_args(self):
+        """Ensures other options are ignored"""
+        ignored_option = 'zzz'
+        input_args = defaultdict()
+        input_args[ignored_option] = self.DEFAULT_VALUE
+        block_options = BlockOptions(**input_args)
+        self.assertFalse(hasattr(block_options, ignored_option))

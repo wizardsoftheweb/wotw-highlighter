@@ -5,17 +5,36 @@ class BlockOptions(object):
     BlockOptions collects all of the options needed to run any of the child
     classes so that its descendants can pull out only what they need.
     """
-    def __init__(
-            self,
-            from_file=None,
-            alternate_title=None,
-            vcs_branch=None,
-            vcs_link=None,
-            linenos=True
-        ):
-        """The ctor simply assigns defaults"""
-        self.from_file = from_file
-        self.alternate_title = alternate_title
-        self.vcs_branch = vcs_branch
-        self.vcs_link = vcs_link
-        self.linenos = linenos
+
+    USED_KWARGS = [
+        'from_file',
+        'linenos',
+        'title',
+        'vcs_branch',
+        'vcs_link'
+    ]
+
+    from_file = None
+    linenos = True
+    title = None
+    vcs_branch = None
+    vcs_link = None
+
+    def __init__(self, **kwargs):
+        """The ctor simply assigns defaults
+
+        Possible parameters:
+        from_file=None
+            A filename to load/parse/etc
+        title=None
+            The title to use for highlighted blobs or instead of the filename
+        vcs_branch=None
+            Branch/Reference from VCS
+        vcs_link=None
+            Link to the file in VCS
+        linenos=True
+            Whether or not to generate line numbers
+        """
+        for option in self.USED_KWARGS:
+            if option in kwargs:
+                setattr(self, option, kwargs.get(option))
