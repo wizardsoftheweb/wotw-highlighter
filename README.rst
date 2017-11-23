@@ -28,3 +28,12 @@ Themes
 ------
 
 `v0` only includes Monokai support. Eventually I'm going to add a few other defaults and ``.tmTheme`` parsing. Right now I'm just to finish a blog post I started three weeks ago that's now spawned two Python packages.
+
+Wishlist
+--------
+
+These are things that I'd like to add but don't haven't added yet. It's not a roadmap; I don't have a release schedule.
+
+* ``less`` instead of ``css``
+* ``tmTheme`` parsing
+* font conversion
