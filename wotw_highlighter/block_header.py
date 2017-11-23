@@ -53,3 +53,15 @@ from_file and alternate_title cannot both be empty when generating a header\
             else self.from_file
         )
         return self.construct_code_tab(title, True)
+
+    def render_vcs_link_tab(self):
+        """Renders the VCS link tab"""
+        if self.vcs_link:
+            tab_body = (
+                '<a target="_blank" href="%s">'
+                'view source <i class="fa fa-external-link"></i>'
+                '</a>'
+                % (self.vcs_link)
+            )
+            return self.construct_code_tab(tab_body)
+        return self.RENDER_AN_OPTION_NOT_INCLUDED
