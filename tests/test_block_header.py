@@ -21,3 +21,26 @@ class ConstructorUnitTests(BlockHeaderTestCase):
         """TODO: better tests"""
         header = BlockHeader()
         self.assertTrue(header.linenos)
+
+class ConstructCodeTabUnitTests(BlockHeaderTestCase):
+    """Collects tests on construct_code_tab"""
+
+    def setUp(self):
+        self.construct_header()
+        self.contents = 'qqq'
+
+    def test_contents_assignment(self):
+        """Ensures contents is inserted correctly"""
+        output = '<div class="code-tab">qqq</div>'
+        self.assertEqual(
+            self.header.construct_code_tab(self.contents),
+            output,
+        )
+
+    def test_active_assignment(self):
+        """Ensure active is properly assigned"""
+        output = '<div class="code-tab active">qqq</div>'
+        self.assertEqual(
+            self.header.construct_code_tab(self.contents, True),
+            output,
+        )
