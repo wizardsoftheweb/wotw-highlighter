@@ -7,9 +7,14 @@ class BlockHeader(BlockOptions):
 
     RENDER_AN_OPTION_NOT_INCLUDED = ''
 
-    def __init__(self, **kwargs):
-        """The ctor simply loads options via BlockOptions"""
-        super(BlockHeader, self).__init__(kwargs)
+    ERROR_NEED_FROM_FILE_OR_TITLE = ValueError('''\
+from_file and alternate_title cannot both be empty when generating a header\
+''')
+
+    def validate(self):
+        """Overrides super validate"""
+        if self.from_file is None and self.title is None:
+            raise self.ERROR_NEED_FROM_FILE_OR_TITLE
 
     @staticmethod
     def construct_code_tab(contents, active=False):

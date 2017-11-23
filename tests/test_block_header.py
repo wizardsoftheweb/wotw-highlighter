@@ -16,7 +16,10 @@ class BlockHeaderTestCase(unittest.TestCase):
 
     def construct_header(self):
         """Constructs a basic header using only the defaults"""
-        self.header = BlockHeader()
+        validate_patcher = patch.object(BlockHeader, 'validate')
+        validate_patcher.start()
+        self.header = BlockHeader(title='qqq.qqq')
+        validate_patcher.stop()
         self.addCleanup(self.wipe_header)
 
     def construct_with_mock_statics(self):
@@ -26,13 +29,23 @@ class BlockHeaderTestCase(unittest.TestCase):
         self.addCleanup(construct_patcher.stop)
         self.construct_header()
 
-class ConstructorUnitTests(BlockHeaderTestCase):
-    """Collects tests on the ctor"""
+class ValidateUnittests(BlockHeaderTestCase):
+    """Collects tests on validate"""
 
-    def test_options(self):
-        """TODO: better tests"""
-        header = BlockHeader()
-        self.assertTrue(header.linenos)
+    def setUp(self):
+        self.construct_header()
+
+    def test_no_title_check(self):
+        """Ensures an error is thrown when no title is used"""
+        self.header.from_file = None
+        self.header.title = None
+        with self.assertRaises(ValueError):
+            self.header.validate()
+
+    def test_any_title_check(self):
+        """Ensures an okay passes through"""
+        self.assertIsNone(self.header.validate())
+
 
 class ConstructCodeTabUnitTests(BlockHeaderTestCase):
     """Collects tests on construct_code_tab"""
