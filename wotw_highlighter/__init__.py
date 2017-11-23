@@ -4,3 +4,4 @@ the amazing Pygments and some opinionated markup
 """
 
 from .__version__ import __version__
+from .block_options import BlockOptions
