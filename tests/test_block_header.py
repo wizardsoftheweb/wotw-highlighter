@@ -89,3 +89,23 @@ class RenderVcsBranchTabUnitTestss(BlockHeaderTestCase):
             self.header.render_vcs_branch_tab(),
             BlockHeader.RENDER_AN_OPTION_NOT_INCLUDED
         )
+
+class RenderTitleTabUnitTests(BlockHeaderTestCase):
+    """Collects tests on render_title_tab"""
+
+    def setUp(self):
+        self.construct_with_mock_statics()
+
+    def test_with_title(self):
+        """Tests rendering with a title"""
+        self.header.title = 'title'
+        self.header.from_file = None
+        self.header.render_title_tab()
+        self.mock_construct.assert_called_once_with('title', True)
+
+    def test_with_from_file(self):
+        """Tests rendering with a from_file"""
+        self.header.title = None
+        self.header.from_file = 'from_file'
+        self.header.render_title_tab()
+        self.mock_construct.assert_called_once_with('from_file', True)

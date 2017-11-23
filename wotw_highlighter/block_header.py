@@ -44,3 +44,12 @@ from_file and alternate_title cannot both be empty when generating a header\
         if self.vcs_branch:
             return self.construct_code_tab(self.vcs_branch)
         return self.RENDER_AN_OPTION_NOT_INCLUDED
+
+    def render_title_tab(self):
+        """Renders the blob title"""
+        title = (
+            self.title
+            if self.title
+            else self.from_file
+        )
+        return self.construct_code_tab(title, True)
