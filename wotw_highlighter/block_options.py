@@ -38,3 +38,8 @@ class BlockOptions(object):
         for option in self.USED_KWARGS:
             if option in kwargs:
                 setattr(self, option, kwargs.get(option))
+        self.validate()
+
+    def validate(self): # pylint: disable=R0201
+        """Overriden by children to validate options"""
+        return
