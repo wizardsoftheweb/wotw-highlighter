@@ -202,7 +202,6 @@ Cannot specify a ref name or hash without also specifying a blob path or hash'''
     def load(self):
         """Loads the blob intelligently"""
         self.parse_raw_as_options()
-        print 'parsed'
         if self.blob:
             return self.blob
         try:
