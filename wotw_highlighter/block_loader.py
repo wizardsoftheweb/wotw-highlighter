@@ -64,3 +64,29 @@ class BlockLoader(BlockOptions):
                     self.blob_working_directory,
                 )
             )
+
+    def validate(self):
+        if self.git_ref_name or self.git_ref_hash or self.git_blob_hash:
+            self.validate_git_directory()
+        if self.git_ref_name:
+            self.validate_git_ref_name()
+        if self.git_ref_hash:
+            self.validate_git_hash(self.git_ref_hash)
+        if self.git_blob_hash:
+            self.validate_git_hash(self.git_blob_hash)
+        if (
+                not self.blob_path and
+                not self.git_ref_name and
+                not self.git_ref_hash and
+                not self.git_blob_hash
+        ):
+            raise ValueError('''\
+Must specify an input string, file, or git ref\
+''')
+        if (
+                (self.git_ref_name or self.git_ref_hash)
+                and not self.git_blob_hash
+                and not self.blob_path
+        ):
+            raise ValueError('''\
+Cannot specify a ref name or hash without also specifying a blob path or hash''')
