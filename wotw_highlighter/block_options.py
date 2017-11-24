@@ -12,15 +12,15 @@ class BlockOptions(object):
         'linenos',
         'no_header',
         'title',
-        'vcs_branch',
+        'git_ref_name',
         'vcs_link'
     ]
 
     from_file = None
+    git_ref_name = None
     linenos = True
     no_header = False
     title = None
-    vcs_branch = None
     vcs_link = None
 
     def __init__(self, **kwargs):
@@ -29,14 +29,14 @@ class BlockOptions(object):
         Possible parameters:
         from_file = None
             A filename to load/parse/etc
+        git_ref_name = None
+            Branch/Reference from git
         linenos = True
             Whether or not to generate line numbers
         no_header = False
             Skip header generation on files/named blobs
         title=None
             The title to use for highlighted blobs or instead of the filename
-        vcs_branch = None
-            Branch/Reference from VCS
         vcs_link = None
             Link to the file in VCS
         """

@@ -40,10 +40,10 @@ from_file and alternate_title cannot both be empty when generating a header\
             )
         )
 
-    def render_vcs_branch_tab(self):
+    def render_git_ref_name_tab(self):
         """Renders the VCS branch tab"""
-        if self.vcs_branch:
-            return self.construct_code_tab(self.vcs_branch)
+        if self.git_ref_name:
+            return self.construct_code_tab(self.git_ref_name)
         return self.RENDER_AN_OPTION_NOT_INCLUDED
 
     def render_title_tab(self):
@@ -79,7 +79,7 @@ from_file and alternate_title cannot both be empty when generating a header\
             '</td>'
             '</tr>'
             % (
-                self.render_vcs_branch_tab(),
+                self.render_git_ref_name_tab(),
                 self.render_title_tab(),
                 self.render_vcs_link_tab()
             )

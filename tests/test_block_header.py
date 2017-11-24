@@ -73,7 +73,7 @@ class ConstructCodeTabUnitTests(BlockHeaderTestCase):
 
 
 class RenderVcsBranchTabUnitTestss(BlockHeaderTestCase):
-    """Collects tests on render_vcs_branch_tab"""
+    """Collects tests on render_git_ref_name_tab"""
 
     def setUp(self):
         self.construct_with_mock_statics()
@@ -81,14 +81,14 @@ class RenderVcsBranchTabUnitTestss(BlockHeaderTestCase):
 
     def test_with_branch(self):
         """Tests rendering with a branch"""
-        self.header.vcs_branch = self.branch
-        self.header.render_vcs_branch_tab()
+        self.header.git_ref_name = self.branch
+        self.header.render_git_ref_name_tab()
         self.mock_construct.assert_called_with(self.branch)
 
     def test_without_branch(self):
         """Tests rendering without a branch"""
         self.assertEqual(
-            self.header.render_vcs_branch_tab(),
+            self.header.render_git_ref_name_tab(),
             BlockHeader.RENDER_AN_OPTION_NOT_INCLUDED
         )
 
@@ -147,7 +147,7 @@ class RenderFullHeader(BlockHeaderTestCase):
     def setUp(self):
         branch_patcher = patch.object(
             BlockHeader,
-            'render_vcs_branch_tab',
+            'render_git_ref_name_tab',
             return_value='mock_branch',
         )
         self.mock_branch = branch_patcher.start()
