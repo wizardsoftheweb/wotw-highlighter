@@ -1,7 +1,6 @@
 # pylint: disable=w0201
 """This file collects tests for BlockHeader"""
 
-# from collections import defaultdict
 import unittest
 from mock import patch
 
@@ -74,7 +73,7 @@ class ConstructCodeTabUnitTests(BlockHeaderTestCase):
 
 
 class RenderVcsBranchTabUnitTestss(BlockHeaderTestCase):
-    """Collects tests on render_vcs_branch"""
+    """Collects tests on render_vcs_branch_tab"""
 
     def setUp(self):
         self.construct_with_mock_statics()
@@ -140,3 +139,46 @@ class RenderVcsLinkTabUnitTests(BlockHeaderTestCase):
         )
         self.header.render_vcs_link_tab()
         self.mock_construct.assert_called_once_with(output)
+
+
+class RenderFullHeader(BlockHeaderTestCase):
+    """Collects tests for render_full_header"""
+
+    def setUp(self):
+        branch_patcher = patch.object(
+            BlockHeader,
+            'render_vcs_branch_tab',
+            return_value='mock_branch',
+        )
+        self.mock_branch = branch_patcher.start()
+        self.addCleanup(branch_patcher.stop)
+        link_patcher = patch.object(
+            BlockHeader,
+            'render_vcs_link_tab',
+            return_value='mock_link',
+        )
+        self.mock_link = link_patcher.start()
+        self.addCleanup(link_patcher.stop)
+        title_patcher = patch.object(
+            BlockHeader,
+            'render_title_tab',
+            return_value='mock_title',
+        )
+        self.mock_title = title_patcher.start()
+        self.addCleanup(title_patcher.stop)
+        self.construct_header()
+
+    def test_full_render(self):
+        """Tests the full render"""
+        desired_output = (
+            '<tr class="code-header">'
+            '<td></td>'
+            '<td class="code-header">'
+            'mock_branch'
+            'mock_title'
+            'mock_link'
+            '</td>'
+            '</tr>'
+        )
+        output = self.header.render_full_header()
+        self.assertEqual(output, desired_output)

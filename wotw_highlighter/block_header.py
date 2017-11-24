@@ -66,3 +66,21 @@ from_file and alternate_title cannot both be empty when generating a header\
             )
             return self.construct_code_tab(tab_body)
         return self.RENDER_AN_OPTION_NOT_INCLUDED
+
+    def render_full_header(self):
+        """Renders the entire header row"""
+        return (
+            '<tr class="code-header">'
+            '<td></td>'
+            '<td class="code-header">'
+            '%s'
+            '%s'
+            '%s'
+            '</td>'
+            '</tr>'
+            % (
+                self.render_vcs_branch_tab(),
+                self.render_title_tab(),
+                self.render_vcs_link_tab()
+            )
+        )
