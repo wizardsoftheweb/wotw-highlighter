@@ -7,6 +7,7 @@
 .. image:: https://coveralls.io/repos/github/wizardsoftheweb/wotw-highlighter/badge.svg?branch=master
     :target: https://coveralls.io/github/wizardsoftheweb/wotw-highlighter?branch=master
 
+(if these look broken it's probably because they're connected to ``master`` branch; click through to the current release or ``dev`` results)
 
 ``wotw-highlighter``
 ==================
