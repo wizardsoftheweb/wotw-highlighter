@@ -10,6 +10,7 @@ class BlockOptions(object):
     """
 
     USED_KWARGS = [
+        'blob',
         'blob_path',
         'blob_working_directory',
         'external_source_link',
@@ -22,6 +23,7 @@ class BlockOptions(object):
         'title',
     ]
 
+    blob = None
     blob_path = None
     external_source_link = None
     git_ref_name = None
@@ -38,6 +40,8 @@ class BlockOptions(object):
         """The ctor simply assigns defaults
 
         Possible parameters:
+        blob = None
+            The raw file blob to parse
         blob_path = None
             A path to load/parse/etc
         blob_working_directory=os.getcwd()
