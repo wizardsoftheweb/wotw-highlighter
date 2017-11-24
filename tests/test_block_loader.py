@@ -338,3 +338,78 @@ class ParseRawAsOptionsUnitTests(LoaderTestCase):
         self.assertIsNone(self.block_loader.blob)
         self.block_loader.parse_raw_as_options()
         self.assertEqual(self.block_loader.blob, raw_code)
+
+
+class LoadUnitTests(LoaderTestCase):
+
+    RAW_INPUT = 'raw is war'
+    BLOB_CONTENT = 'blob_content'
+
+    def set_blob_side_effect(self):
+        self.block_loader.blob = self.BLOB_CONTENT
+
+    def setUp(self):
+        parse_patcher = patch.object(BlockLoader, 'parse_raw_as_options')
+        self.mock_parse = parse_patcher.start()
+        self.addCleanup(parse_patcher.stop)
+        load_git_patcher = patch.object(BlockLoader, 'load_from_git')
+        self.mock_load_git = load_git_patcher.start()
+        self.addCleanup(load_git_patcher.stop)
+        load_file_patcher = patch.object(BlockLoader, 'load_from_file')
+        self.mock_load_file = load_file_patcher.start()
+        self.addCleanup(load_file_patcher.stop)
+        self.build_loader()
+        self.block_loader.blob = None
+
+    def test_parse_raw_is_blob(self):
+        self.block_loader.blob = self.RAW_INPUT
+        self.mock_load_git.side_effect = IOError
+        output = self.block_loader.load()
+        self.assertEqual(output, self.RAW_INPUT)
+        self.mock_parse.assert_called_once_with()
+        self.assertFalse(self.mock_load_git.called)
+        self.assertFalse(self.mock_load_file.called)
+
+    def test_load_git_successful(self):
+        self.block_loader.git_blob_hash = self.RAW_INPUT
+        self.mock_load_git.side_effect = self.set_blob_side_effect
+        self.mock_load_file.side_effect = IOError
+        self.assertNotEqual(self.block_loader.blob, self.BLOB_CONTENT)
+        output = self.block_loader.load()
+        self.assertEqual(output, self.BLOB_CONTENT)
+        self.mock_parse.assert_called_once_with()
+        self.mock_load_git.assert_called_once_with()
+        self.assertFalse(self.mock_load_file.called)
+
+    def test_load_file_successful(self):
+        self.block_loader.git_blob_hash = self.RAW_INPUT
+        self.mock_load_git.side_effect = ValueError
+        self.mock_load_file.side_effect = self.set_blob_side_effect
+        self.assertNotEqual(self.block_loader.blob, self.BLOB_CONTENT)
+        output = self.block_loader.load()
+        self.assertEqual(output, self.BLOB_CONTENT)
+        self.mock_parse.assert_called_once_with()
+        self.mock_load_git.assert_called_once_with()
+        self.mock_load_file.assert_called_once_with()
+
+    def test_loads_failed(self):
+        self.block_loader.raw = self.RAW_INPUT
+        self.block_loader.git_blob_hash = self.RAW_INPUT
+        self.mock_load_git.side_effect = ValueError
+        self.mock_load_file.side_effect = ValueError
+        self.assertNotEqual(self.block_loader.blob, self.RAW_INPUT)
+        output = self.block_loader.load()
+        self.assertEqual(output, self.RAW_INPUT)
+        self.mock_parse.assert_called_once_with()
+        self.mock_load_git.assert_called_once_with()
+        self.mock_load_file.assert_called_once_with()
+
+    def test_everything_failed(self):
+        self.block_loader.raw = None
+        self.mock_load_git.side_effect = ValueError
+        self.mock_load_file.side_effect = ValueError
+        with self.assertRaisesRegexp(ValueError, 'Unable'):
+            self.block_loader.load()
+        self.mock_parse.assert_called_once_with()
+        self.assertFalse(self.mock_load_git.called)
+        self.mock_load_file.assert_called_once_with()

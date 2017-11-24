@@ -25,7 +25,7 @@ class BlockLoader(BlockOptions):
     [ :]            # ls-tree can read ref:path or ref path
 )?
 (?P<blob_path>      # save this one as blob_path
-    [^\n]+          # assume anything leftover until a newline is the path
+    [^\n]+          # assume anything left over until a newline is the path
 )$
 """,
         re.VERBOSE
@@ -198,3 +198,27 @@ Cannot specify a ref name or hash without also specifying a blob path or hash'''
                     self.blob_path = potential_path
         else:
             self.blob = self.raw
+
+    def load(self):
+        """Loads the blob intelligently"""
+        self.parse_raw_as_options()
+        print 'parsed'
+        if self.blob:
+            return self.blob
+        try:
+            if self.git_blob_hash or self.git_ref_hash or self.git_ref_name:
+                self.load_from_git()
+                return self.blob
+        except ValueError:
+            pass
+        try:
+            self.load_from_file()
+            return self.blob
+        except ValueError:
+            pass
+
+        if self.raw:
+            self.blob = self.raw
+            return self.blob
+        else:
+            raise ValueError('Unable to load from positional and keyword args')
