@@ -8,14 +8,14 @@ class BlockHeader(BlockOptions):
 
     RENDER_AN_OPTION_NOT_INCLUDED = ''
 
-    ERROR_NEED_FROM_FILE_OR_TITLE = ValueError('''\
-from_file and alternate_title cannot both be empty when generating a header\
+    ERROR_NEED_blob_path_OR_TITLE = ValueError('''\
+blob_path and alternate_title cannot both be empty when generating a header\
 ''')
 
     def validate(self):
         """Overrides super validate"""
-        if self.from_file is None and self.title is None:
-            raise self.ERROR_NEED_FROM_FILE_OR_TITLE
+        if self.blob_path is None and self.title is None:
+            raise self.ERROR_NEED_blob_path_OR_TITLE
 
     @staticmethod
     def construct_code_tab(contents, active=False):
@@ -51,7 +51,7 @@ from_file and alternate_title cannot both be empty when generating a header\
         title = (
             self.title
             if self.title
-            else self.from_file
+            else self.blob_path
         )
         return self.construct_code_tab(title, True)
 

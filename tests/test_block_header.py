@@ -38,7 +38,7 @@ class ValidateUnittests(BlockHeaderTestCase):
 
     def test_no_title_check(self):
         """Ensures an error is thrown when no title is used"""
-        self.header.from_file = None
+        self.header.blob_path = None
         self.header.title = None
         with self.assertRaises(ValueError):
             self.header.validate()
@@ -102,16 +102,16 @@ class RenderTitleTabUnitTests(BlockHeaderTestCase):
     def test_with_title(self):
         """Tests rendering with a title"""
         self.header.title = 'title'
-        self.header.from_file = None
+        self.header.blob_path = None
         self.header.render_title_tab()
         self.mock_construct.assert_called_once_with('title', True)
 
-    def test_with_from_file(self):
-        """Tests rendering with a from_file"""
+    def test_with_blob_path(self):
+        """Tests rendering with a blob_path"""
         self.header.title = None
-        self.header.from_file = 'from_file'
+        self.header.blob_path = 'blob_path'
         self.header.render_title_tab()
-        self.mock_construct.assert_called_once_with('from_file', True)
+        self.mock_construct.assert_called_once_with('blob_path', True)
 
 
 class RenderVcsLinkTabUnitTests(BlockHeaderTestCase):

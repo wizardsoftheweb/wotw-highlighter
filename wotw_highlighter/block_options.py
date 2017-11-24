@@ -8,7 +8,7 @@ class BlockOptions(object):
     """
 
     USED_KWARGS = [
-        'from_file',
+        'blob_path',
         'linenos',
         'no_header',
         'title',
@@ -16,9 +16,11 @@ class BlockOptions(object):
         'external_source_link'
     ]
 
+    blob_path = None
     external_source_link = None
-    from_file = None
     git_ref_name = None
+    git_ref_hash = None
+    git_blob_hash = None
     linenos = True
     no_header = False
     title = None
@@ -27,12 +29,16 @@ class BlockOptions(object):
         """The ctor simply assigns defaults
 
         Possible parameters:
+        blob_path = None
+            A path to load/parse/etc
         external_source_link = None
             Link to the file in VCS
-        from_file = None
-            A filename to load/parse/etc
         git_ref_name = None
-            Branch/Reference from git
+            Branch/reference name from git
+        git_ref_hash = None
+            Branch/reference hash from git
+        git_blob_hash = None
+            Blob hash from git
         linenos = True
             Whether or not to generate line numbers
         no_header = False
