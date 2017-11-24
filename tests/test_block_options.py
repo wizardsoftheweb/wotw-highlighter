@@ -21,12 +21,12 @@ class BlockOptionsTestCase(TestCase):
     def tearDown(self):
         del self.block_options
 
-    def patch_validate(self):
+    def patch_ctor_methods(self):
         """Patches the validate method"""
         self.validate_patch = patch.object(BlockOptions, 'validate')
         self.mock_validate = self.validate_patch.start()
 
-    def schedule_patch_cleanup(self):
+    def schedule_ctor_patch_cleanup(self):
         """Defers removing the patch"""
         self.addCleanup(self.validate_patch.stop)
 
@@ -48,12 +48,12 @@ class BlockOptionsTestCase(TestCase):
         self.construct_options(**kwargs)
         self.validate_patch.stop()
 
-    def build_options_with_mock_validate(self, **kwargs):
+    def build_options_retain_mocks(self, **kwargs):
         """
         Patches the method and creates the instance without removing the mock
         """
         self.construct_options(**kwargs)
-        self.schedule_patch_cleanup()
+        self.schedule_ctor_patch_cleanup()
 
 
 class ConstructorUnitTests(BlockOptionsTestCase):
@@ -64,7 +64,7 @@ class ConstructorUnitTests(BlockOptionsTestCase):
         for option in BlockOptions.USED_KWARGS:
             input_args = defaultdict()
             input_args[option] = self.DEFAULT_VALUE
-            self.build_options_with_mock_validate(**input_args)
+            self.build_options_retain_mocks(**input_args)
             self.assertEqual(
                 getattr(self.block_options, option),
                 self.DEFAULT_VALUE
@@ -75,7 +75,7 @@ class ConstructorUnitTests(BlockOptionsTestCase):
         ignored_option = 'zzz'
         input_args = defaultdict()
         input_args[ignored_option] = self.DEFAULT_VALUE
-        self.build_options_with_mock_validate(**input_args)
+        self.build_options_retain_mocks(**input_args)
         self.assertFalse(hasattr(self.block_options, ignored_option))
 
     def test_validate(self):
