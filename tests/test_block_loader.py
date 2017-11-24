@@ -11,7 +11,7 @@ from mock import call, MagicMock, patch
 from wotw_highlighter import BlockLoader
 
 
-class LoaderTestCase(TestCase):
+class BlockLoaderTestCase(TestCase):
     """Collects common items and defaults across test cases"""
 
     BLOB_WORKING_DIRECTORY = 'blob/working/directory'
@@ -38,7 +38,7 @@ class LoaderTestCase(TestCase):
         self.addCleanup(self.wipe_loader)
 
 
-class ValidateGitDirectory(LoaderTestCase):
+class ValidateGitDirectory(BlockLoaderTestCase):
 
     def setUp(self):
         self.build_loader()
@@ -56,7 +56,7 @@ class ValidateGitDirectory(LoaderTestCase):
             self.block_loader.validate_git_directory()
 
 
-class ValidateGitRefNameUnitTests(LoaderTestCase):
+class ValidateGitRefNameUnitTests(BlockLoaderTestCase):
 
     def setUp(self):
         self.build_loader()
@@ -74,7 +74,7 @@ class ValidateGitRefNameUnitTests(LoaderTestCase):
             self.block_loader.validate_git_ref_name()
 
 
-class ValidateGitHashUnitTests(LoaderTestCase):
+class ValidateGitHashUnitTests(BlockLoaderTestCase):
 
     def setUp(self):
         self.build_loader()
@@ -92,7 +92,7 @@ class ValidateGitHashUnitTests(LoaderTestCase):
             self.block_loader.validate_git_hash('some hash')
 
 
-class ValidateUnitTests(LoaderTestCase):
+class ValidateUnitTests(BlockLoaderTestCase):
 
     def setUp(self):
         ref_name_patcher = patch.object(BlockLoader, 'validate_git_ref_name')
@@ -149,7 +149,7 @@ class ValidateUnitTests(LoaderTestCase):
         ])
 
 
-class LoadFromFileUnitTests(LoaderTestCase):
+class LoadFromFileUnitTests(BlockLoaderTestCase):
 
     FILE_CONTENTS = 'qqq'
 
@@ -175,7 +175,7 @@ class LoadFromFileUnitTests(LoaderTestCase):
             self.block_loader.load_from_file()
 
 
-class DiscoverBlobHashUnitTests(LoaderTestCase):
+class DiscoverBlobHashUnitTests(BlockLoaderTestCase):
 
     GIT_HASH = 'qqq'
 
@@ -242,7 +242,7 @@ class DiscoverBlobHashUnitTests(LoaderTestCase):
             self.block_loader.discover_blob_hash()
 
 
-class LoadFromGitUnitTests(LoaderTestCase):
+class LoadFromGitUnitTests(BlockLoaderTestCase):
 
     BLOB_HASH = 'qqq'
     BLOB_CONTENTS = 'raw is war'
@@ -279,7 +279,7 @@ class LoadFromGitUnitTests(LoaderTestCase):
         self.assertEqual(self.block_loader.blob, self.BLOB_CONTENTS)
 
 
-class ParseRawAsOptionsUnitTests(LoaderTestCase):
+class ParseRawAsOptionsUnitTests(BlockLoaderTestCase):
 
     REF = 'qqq'
     PATH = 'path/to/file'
@@ -340,7 +340,7 @@ class ParseRawAsOptionsUnitTests(LoaderTestCase):
         self.assertEqual(self.block_loader.blob, raw_code)
 
 
-class LoadUnitTests(LoaderTestCase):
+class LoadUnitTests(BlockLoaderTestCase):
 
     RAW_INPUT = 'raw is war'
     BLOB_CONTENT = 'blob_content'
