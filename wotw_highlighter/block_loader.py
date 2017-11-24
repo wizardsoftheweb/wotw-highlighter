@@ -96,7 +96,7 @@ Must specify an input string, file, or git ref\
 Cannot specify a ref name or hash without also specifying a blob path or hash''')
 
     def load_from_file(self):
-        """Loads blob_path into blob"""
+        """Loads blob_path's contents into blob"""
         blob_file = open(self.blob_path, 'r')
         self.blob = blob_file.read()
 
@@ -122,3 +122,10 @@ Cannot specify a ref name or hash without also specifying a blob path or hash'''
                     )
                 )
         return self.git_blob_hash
+
+    def load_from_git(self):
+        """Discovers git_blob_hash and loads its contents into blob"""
+        self.discover_blob_hash()
+        self.blob = check_output(
+            ['git', 'cat-file', '-p', self.git_blob_hash]
+        )

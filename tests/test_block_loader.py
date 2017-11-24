@@ -240,3 +240,40 @@ class DiscoverBlobHashUnitTests(LoaderTestCase):
         self.block_loader.blob_path = 'blob_path'
         with self.assertRaisesRegexp(ValueError, 'Ref.*?does not contain'):
             self.block_loader.discover_blob_hash()
+
+
+class LoadFromGitUnitTests(LoaderTestCase):
+
+    BLOB_HASH = '9062bb423143b519207aff1827adbba06159d827'
+    BLOB_CONTENTS = 'raw is war'
+
+    def set_hash_side_effect(self):
+        self.block_loader.git_blob_hash = self.BLOB_HASH
+
+    def setUp(self):
+        discover_patcher = patch.object(
+            BlockLoader,
+            'discover_blob_hash',
+            side_effect=self.set_hash_side_effect,
+        )
+        self.mock_discover = discover_patcher.start()
+        self.addCleanup(discover_patcher.stop)
+        self.build_loader()
+        self.block_loader.git_blob_hash = None
+
+    @patch(
+        'wotw_highlighter.block_loader.check_output',
+    )
+    def test_blob_hash_discovery(self, mock_check_output):
+        self.assertIsNone(self.block_loader.git_blob_hash)
+        self.block_loader.load_from_git()
+        self.assertEqual(self.block_loader.git_blob_hash, self.BLOB_HASH)
+
+    @patch(
+        'wotw_highlighter.block_loader.check_output',
+        return_value=BLOB_CONTENTS,
+    )
+    def test_blob_assignment(self, mock_check_output):
+        self.assertIsNone(self.block_loader.blob)
+        self.block_loader.load_from_git()
+        self.assertEqual(self.block_loader.blob, self.BLOB_CONTENTS)
