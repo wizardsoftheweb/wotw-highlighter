@@ -13,6 +13,7 @@ class BlockOptions(object):
         'blob',
         'blob_path',
         'blob_working_directory',
+        'explicit_lexer_name',
         'external_source_link',
         'git_ref_name',
         'git_ref_hash',
@@ -25,6 +26,7 @@ class BlockOptions(object):
 
     blob = None
     blob_path = None
+    explicit_lexer_name = None
     external_source_link = None
     git_ref_name = None
     git_ref_hash = None
@@ -46,6 +48,8 @@ class BlockOptions(object):
             A path to load/parse/etc
         blob_working_directory=os.getcwd()
             The directory to use for input commands
+        explicit_lexer_name = None
+            Name of lexer to use from Pygments rather than guessing
         external_source_link = None
             Link to the file in VCS
         git_ref_name = None
