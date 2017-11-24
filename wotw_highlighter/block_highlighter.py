@@ -1,6 +1,6 @@
 """This file provides a class to highlight code"""
 
-from pygments import lexers
+from pygments import lexers, highlight
 from pygments.formatters.html import HtmlFormatter
 from pygments.util import ClassNotFound
 
@@ -56,3 +56,11 @@ class BlockHighlighter(BlockOptions):
     def attach_formatter(self):
         """Currently only assigns a vanilla HtmlFormatter"""
         self.formatter = HtmlFormatter(**self.DEFAULT_HTMLFORMATTER_OPTIONS)
+
+    def highlight(self):
+        """Highlights blob using lexer via formatter"""
+        self.highlighted_blob = highlight(
+            self.blob,
+            self.lexer,
+            self.formatter
+        )

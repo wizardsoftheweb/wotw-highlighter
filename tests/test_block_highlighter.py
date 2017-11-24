@@ -4,7 +4,8 @@
 
 from unittest import TestCase
 
-from mock import patch
+from mock import MagicMock, patch
+from pygments.formatters.html import HtmlFormatter
 from pygments.lexer import Lexer
 from pygments.lexers.python import PythonLexer
 from pygments.util import ClassNotFound
@@ -107,4 +108,29 @@ class AttachFormatterUnitTests(BlockHighlighterTestCase):
         self.block_highlighter.attach_formatter()
         mock_formatter.assert_called_once_with(
             **BlockHighlighter.DEFAULT_HTMLFORMATTER_OPTIONS
+        )
+
+
+class HighlightUnitTests(BlockHighlighterTestCase):
+
+    @patch(
+        'wotw_highlighter.block_highlighter.highlight'
+    )
+    def test_highlight_call(self, mock_highlight):
+        highlight_ret_val = 'your token string'
+        mock_highlight.return_value = highlight_ret_val
+        self.block_highlighter.blob = fake_blob = 'qqq'
+        self.block_highlighter.lexer = mock_lexer = MagicMock(spec=Lexer)
+        self.block_highlighter.formatter = mock_formatter = MagicMock(
+            spec=HtmlFormatter
+        )
+        self.block_highlighter.highlight()
+        self.assertEqual(
+            self.block_highlighter.highlighted_blob,
+            highlight_ret_val
+        )
+        mock_highlight.assert_called_once_with(
+            fake_blob,
+            mock_lexer,
+            mock_formatter
         )
