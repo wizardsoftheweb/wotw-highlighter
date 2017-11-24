@@ -1,8 +1,5 @@
 """This file provides a class to highlight code"""
 
-# from pygments import highlight
-# from pygments.lexers import get_lexer_for_filename, guess_lexer
-
 from pygments import lexers
 from pygments.formatters.html import HtmlFormatter
 from pygments.util import ClassNotFound
