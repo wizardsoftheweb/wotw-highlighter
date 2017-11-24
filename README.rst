@@ -28,7 +28,7 @@ TODO
 Themes
 ------
 
-`v0` only includes Monokai support. Eventually I'm going to add a few other defaults and ``.tmTheme`` parsing. Right now I'm just to finish a blog post I started three weeks ago that's now spawned two Python packages.
+`v0` only includes Monokai support. Eventually I'm going to add a few other defaults and ``.tmTheme`` parsing. Right now I'm just to finish a blog post I started three weeks ago that's now spawned three Python packages.
 
 Wishlist
 --------
