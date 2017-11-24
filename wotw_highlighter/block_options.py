@@ -27,16 +27,18 @@ class BlockOptions(object):
         """The ctor simply assigns defaults
 
         Possible parameters:
-        from_file=None
+        from_file = None
             A filename to load/parse/etc
+        linenos = True
+            Whether or not to generate line numbers
+        no_header = False
+            Skip header generation on files/named blobs
         title=None
             The title to use for highlighted blobs or instead of the filename
-        vcs_branch=None
+        vcs_branch = None
             Branch/Reference from VCS
-        vcs_link=None
+        vcs_link = None
             Link to the file in VCS
-        linenos=True
-            Whether or not to generate line numbers
         """
         for option in self.USED_KWARGS:
             if option in kwargs:
