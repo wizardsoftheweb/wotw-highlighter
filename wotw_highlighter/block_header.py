@@ -55,14 +55,14 @@ from_file and alternate_title cannot both be empty when generating a header\
         )
         return self.construct_code_tab(title, True)
 
-    def render_vcs_link_tab(self):
+    def render_external_source_link_tab(self):
         """Renders the VCS link tab"""
-        if self.vcs_link:
+        if self.external_source_link:
             tab_body = (
                 '<a target="_blank" href="%s">'
                 'view source <i class="fa fa-external-link"></i>'
                 '</a>'
-                % (self.vcs_link)
+                % (self.external_source_link)
             )
             return self.construct_code_tab(tab_body)
         return self.RENDER_AN_OPTION_NOT_INCLUDED
@@ -81,7 +81,7 @@ from_file and alternate_title cannot both be empty when generating a header\
             % (
                 self.render_git_ref_name_tab(),
                 self.render_title_tab(),
-                self.render_vcs_link_tab()
+                self.render_external_source_link_tab()
             )
         )
 

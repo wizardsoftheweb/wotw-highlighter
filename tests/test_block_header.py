@@ -115,29 +115,29 @@ class RenderTitleTabUnitTests(BlockHeaderTestCase):
 
 
 class RenderVcsLinkTabUnitTests(BlockHeaderTestCase):
-    """Collects tests on render_vcs_link_tab"""
+    """Collects tests on render_external_source_link_tab"""
 
     def setUp(self):
         self.construct_with_mock_statics()
 
     def test_without_link(self):
         """Tests output without a link"""
-        self.header.vcs_link = None
+        self.header.external_source_link = None
         self.assertEqual(
-            self.header.render_vcs_link_tab(),
+            self.header.render_external_source_link_tab(),
             BlockHeader.RENDER_AN_OPTION_NOT_INCLUDED
         )
         self.mock_construct.assert_not_called()
 
     def test_with_link(self):
         """Tests output with a link"""
-        self.header.vcs_link = 'qqq'
+        self.header.external_source_link = 'qqq'
         output = (
             '<a target="_blank" href="qqq">'
             'view source <i class="fa fa-external-link"></i>'
             '</a>'
         )
-        self.header.render_vcs_link_tab()
+        self.header.render_external_source_link_tab()
         self.mock_construct.assert_called_once_with(output)
 
 
@@ -154,7 +154,7 @@ class RenderFullHeader(BlockHeaderTestCase):
         self.addCleanup(branch_patcher.stop)
         link_patcher = patch.object(
             BlockHeader,
-            'render_vcs_link_tab',
+            'render_external_source_link_tab',
             return_value='mock_link',
         )
         self.mock_link = link_patcher.start()

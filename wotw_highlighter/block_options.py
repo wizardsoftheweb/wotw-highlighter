@@ -13,20 +13,22 @@ class BlockOptions(object):
         'no_header',
         'title',
         'git_ref_name',
-        'vcs_link'
+        'external_source_link'
     ]
 
+    external_source_link = None
     from_file = None
     git_ref_name = None
     linenos = True
     no_header = False
     title = None
-    vcs_link = None
 
     def __init__(self, **kwargs):
         """The ctor simply assigns defaults
 
         Possible parameters:
+        external_source_link = None
+            Link to the file in VCS
         from_file = None
             A filename to load/parse/etc
         git_ref_name = None
@@ -37,8 +39,6 @@ class BlockOptions(object):
             Skip header generation on files/named blobs
         title=None
             The title to use for highlighted blobs or instead of the filename
-        vcs_link = None
-            Link to the file in VCS
         """
         for option in self.USED_KWARGS:
             if option in kwargs:
