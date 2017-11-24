@@ -4,7 +4,7 @@
 
 from subprocess import CalledProcessError
 from unittest import TestCase
-from mock import call, patch
+from mock import call, MagicMock, patch
 
 from wotw_highlighter import BlockLoader
 
@@ -145,3 +145,29 @@ class ValidateUnitTests(LoaderTestCase):
             call('git_ref_hash'),
             call('git_blob_hash')
         ])
+
+
+class LoadFromFileUnitTests(LoaderTestCase):
+
+    FILE_CONTENTS = 'qqq'
+
+    def setUp(self):
+        self.build_loader()
+
+    @patch(
+        'wotw_highlighter.block_loader.open',
+        return_value=MagicMock(
+            read=MagicMock(return_value=FILE_CONTENTS)
+        )
+    )
+    def test_existing_file(self, mock_open):  # pylint: disable=W0613
+        self.block_loader.load_from_file()
+        self.assertEqual(self.block_loader.blob, self.FILE_CONTENTS)
+
+    @patch(
+        'wotw_highlighter.block_loader.open',
+        side_effect=IOError,
+    )
+    def test_nonexistant_file(self, mock_open):  # pylint: disable=W0613
+        with self.assertRaises(IOError):
+            self.block_loader.load_from_file()

@@ -75,6 +75,7 @@ class BlockLoader(BlockOptions):
         if self.git_blob_hash:
             self.validate_git_hash(self.git_blob_hash)
         if (
+                not self.raw and
                 not self.blob_path and
                 not self.git_ref_name and
                 not self.git_ref_hash and
@@ -87,6 +88,12 @@ Must specify an input string, file, or git ref\
                 (self.git_ref_name or self.git_ref_hash)
                 and not self.git_blob_hash
                 and not self.blob_path
+                and not self.raw
         ):
             raise ValueError('''\
 Cannot specify a ref name or hash without also specifying a blob path or hash''')
+
+    def load_from_file(self):
+        """Loads blob_path into blob"""
+        blob_file = open(self.blob_path, 'r')
+        self.blob = blob_file.read()
