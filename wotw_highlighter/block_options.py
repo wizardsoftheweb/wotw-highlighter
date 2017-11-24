@@ -11,11 +11,14 @@ class BlockOptions(object):
 
     USED_KWARGS = [
         'blob_path',
+        'blob_working_directory',
+        'external_source_link',
+        'git_ref_name',
+        'git_ref_hash',
+        'git_blob_hash',
         'linenos',
         'no_header',
         'title',
-        'git_ref_name',
-        'external_source_link'
     ]
 
     blob_path = None
