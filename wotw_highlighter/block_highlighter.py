@@ -2,10 +2,9 @@
 
 # from pygments import highlight
 # from pygments.lexers import get_lexer_for_filename, guess_lexer
-# from pygments.formatters import HtmlFormatter
-
 
 from pygments import lexers
+from pygments.formatters.html import HtmlFormatter
 from pygments.util import ClassNotFound
 
 from wotw_highlighter.block_options import BlockOptions
@@ -16,7 +15,16 @@ class BlockHighlighter(BlockOptions):
     This class provides a collection of methods to highlight blocks of code
     """
 
+    DEFAULT_LEXER_OPTIONS = {
+        'stripnl': True
+    }
+
+    DEFAULT_HTMLFORMATTER_OPTIONS = {
+        'linenos': True
+    }
+
     lexer = None
+    formatter = None
 
     def validate(self):
         """Validates BlockHighlighter options"""
@@ -35,15 +43,19 @@ class BlockHighlighter(BlockOptions):
         """
         if self.explicit_lexer_name:
             self.lexer = getattr(
-                lexers, self.explicit_lexer_name)(stripall=True)
+                lexers, self.explicit_lexer_name)(**self.DEFAULT_LEXER_OPTIONS)
         else:
             try:
                 self.lexer = lexers.get_lexer_for_filename(
                     self.blob_path,
-                    stripall=True,
+                    **self.DEFAULT_LEXER_OPTIONS
                 )
             except ClassNotFound:
                 self.lexer = lexers.guess_lexer(
                     self.blob,
-                    stripall=True,
+                    **self.DEFAULT_LEXER_OPTIONS
                 )
+
+    def attach_formatter(self):
+        """Currently only assigns a vanilla HtmlFormatter"""
+        self.formatter = HtmlFormatter(**self.DEFAULT_HTMLFORMATTER_OPTIONS)

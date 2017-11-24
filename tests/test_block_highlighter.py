@@ -7,6 +7,7 @@ from unittest import TestCase
 
 from mock import patch
 from pygments.lexer import Lexer
+from pygments.lexers.python import PythonLexer
 from pygments.util import ClassNotFound
 
 from wotw_highlighter import BlockHighlighter
@@ -74,7 +75,7 @@ class AttachLexerUnitTests(BlockHighlighterTestCase):
         self.block_highlighter.explicit_lexer_name = 'PythonLexer'
         self.assertIsNone(self.block_highlighter.lexer)
         self.block_highlighter.attach_lexer()
-        self.assertIsInstance(self.block_highlighter.lexer, Lexer)
+        self.assertIsInstance(self.block_highlighter.lexer, PythonLexer)
 
     def test_guess_from_found_filename(self):
         self.block_highlighter.blob_path = 'test.py'
@@ -96,3 +97,15 @@ class AttachLexerUnitTests(BlockHighlighterTestCase):
         self.assertIsNone(self.block_highlighter.lexer)
         self.block_highlighter.attach_lexer()
         self.assertIsInstance(self.block_highlighter.lexer, Lexer)
+
+
+class AttachFormatterUnitTests(BlockHighlighterTestCase):
+
+    @patch(
+        'wotw_highlighter.block_highlighter.HtmlFormatter'
+    )
+    def test_formatter(self, mock_formatter):
+        self.block_highlighter.attach_formatter()
+        mock_formatter.assert_called_once_with(
+            **BlockHighlighter.DEFAULT_HTMLFORMATTER_OPTIONS
+        )
