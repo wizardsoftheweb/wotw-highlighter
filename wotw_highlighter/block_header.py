@@ -2,6 +2,7 @@
 
 from wotw_highlighter.block_options import BlockOptions
 
+
 class BlockHeader(BlockOptions):
     """This class compiles and renders a block's header (if any)"""
 

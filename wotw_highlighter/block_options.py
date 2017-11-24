@@ -1,5 +1,6 @@
 """This file provides a common class used to collect all of the block options"""
 
+
 class BlockOptions(object):
     """
     BlockOptions collects all of the options needed to run any of the child
@@ -40,7 +41,7 @@ class BlockOptions(object):
                 setattr(self, option, kwargs.get(option))
         self.validate()
 
-    def validate(self): # pylint: disable=R0201
+    def validate(self):  # pylint: disable=R0201
         """Overriden by children to validate options"""
         return
 

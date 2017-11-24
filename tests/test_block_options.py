@@ -10,6 +10,7 @@ from mock import patch
 
 from wotw_highlighter import BlockOptions
 
+
 class BlockOptionsTestCase(unittest.TestCase):
     """Collects common items and defaults across test cases"""
 
@@ -44,6 +45,7 @@ class BlockOptionsTestCase(unittest.TestCase):
         self.block_options = BlockOptions(**kwargs)
         self.schedule_patch_cleanup()
 
+
 class ConstructorUnitTests(BlockOptionsTestCase):
     """Tests the constructor"""
 
@@ -71,6 +73,7 @@ class ConstructorUnitTests(BlockOptionsTestCase):
         self.build_options_with_mock_validate()
         self.assertEquals(self.mock_validate.call_count, 1)
 
+
 class ValidateUnitTests(BlockOptionsTestCase):
     """Tests the empty validate method"""
 
@@ -78,6 +81,7 @@ class ValidateUnitTests(BlockOptionsTestCase):
         """Ensures nothing happens"""
         self.build_options()
         self.assertIsNone(self.block_options.validate())
+
 
 class FullOptionsUnitTests(BlockOptionsTestCase):
     """Tests full_options"""

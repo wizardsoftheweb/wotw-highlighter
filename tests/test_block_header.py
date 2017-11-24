@@ -7,6 +7,7 @@ from mock import patch
 
 from wotw_highlighter import BlockHeader
 
+
 class BlockHeaderTestCase(unittest.TestCase):
     """Collects common items and defaults across test cases"""
 
@@ -28,6 +29,7 @@ class BlockHeaderTestCase(unittest.TestCase):
         self.mock_construct = construct_patcher.start()
         self.addCleanup(construct_patcher.stop)
         self.construct_header()
+
 
 class ValidateUnittests(BlockHeaderTestCase):
     """Collects tests on validate"""
@@ -70,6 +72,7 @@ class ConstructCodeTabUnitTests(BlockHeaderTestCase):
             output,
         )
 
+
 class RenderVcsBranchTabUnitTestss(BlockHeaderTestCase):
     """Collects tests on render_vcs_branch"""
 
@@ -90,6 +93,7 @@ class RenderVcsBranchTabUnitTestss(BlockHeaderTestCase):
             BlockHeader.RENDER_AN_OPTION_NOT_INCLUDED
         )
 
+
 class RenderTitleTabUnitTests(BlockHeaderTestCase):
     """Collects tests on render_title_tab"""
 
@@ -109,6 +113,7 @@ class RenderTitleTabUnitTests(BlockHeaderTestCase):
         self.header.from_file = 'from_file'
         self.header.render_title_tab()
         self.mock_construct.assert_called_once_with('from_file', True)
+
 
 class RenderVcsLinkTabUnitTests(BlockHeaderTestCase):
     """Collects tests on render_vcs_link_tab"""
