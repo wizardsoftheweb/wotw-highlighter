@@ -1,6 +1,6 @@
 """This file provides a common class used to collect all of the block options"""
 
-from os import getcwd
+from os import chdir, getcwd
 
 
 class BlockOptions(object):
@@ -19,7 +19,6 @@ class BlockOptions(object):
     ]
 
     blob_path = None
-    blob_working_directory = getcwd()
     external_source_link = None
     git_ref_name = None
     git_ref_hash = None
@@ -51,6 +50,8 @@ class BlockOptions(object):
         title=None
             The title to use for highlighted blobs or instead of the filename
         """
+        self.launch_directory = getcwd()
+        self.blob_working_directory = getcwd()
         for option in self.USED_KWARGS:
             if option in kwargs:
                 setattr(self, option, kwargs.get(option))
@@ -66,3 +67,9 @@ class BlockOptions(object):
         for option in self.USED_KWARGS:
             options[option] = getattr(self, option)
         return options
+
+    def return_to_launch_directory(self):
+        """Returns to the original directory, where the process was launched"""
+        print getcwd()
+        chdir(self.launch_directory)
+        print getcwd()

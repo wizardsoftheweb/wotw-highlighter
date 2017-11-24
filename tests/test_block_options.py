@@ -1,20 +1,22 @@
 # pylint: disable=w0201
 # pylint: disable=C0103
+# pylint: disable=C0111
 """Collects tests for BlockOptions"""
 
 from collections import defaultdict
-
-import unittest
+from unittest import TestCase
 
 from mock import patch
 
 from wotw_highlighter import BlockOptions
 
 
-class BlockOptionsTestCase(unittest.TestCase):
+class BlockOptionsTestCase(TestCase):
     """Collects common items and defaults across test cases"""
 
     DEFAULT_VALUE = 'qqq'
+
+    LAUNCH_DIRECTORY = 'launch/directory'
 
     def tearDown(self):
         del self.block_options
@@ -28,21 +30,29 @@ class BlockOptionsTestCase(unittest.TestCase):
         """Defers removing the patch"""
         self.addCleanup(self.validate_patch.stop)
 
+    def construct_options(self, **kwargs):
+        self.patch_validate()
+        getcwd_patch = patch(
+            'wotw_highlighter.block_options.getcwd',
+            return_value=self.LAUNCH_DIRECTORY
+        )
+        getcwd_patch.start()
+        self.block_options = BlockOptions(**kwargs)
+        getcwd_patch.stop()
+
     def build_options(self, **kwargs):
         """
         Patches the method in the constructor, creates the instance, and removes
         the patch
         """
-        self.patch_validate()
-        self.block_options = BlockOptions(**kwargs)
+        self.construct_options(**kwargs)
         self.validate_patch.stop()
 
     def build_options_with_mock_validate(self, **kwargs):
         """
         Patches the method and creates the instance without removing the mock
         """
-        self.patch_validate()
-        self.block_options = BlockOptions(**kwargs)
+        self.construct_options(**kwargs)
         self.schedule_patch_cleanup()
 
 
@@ -101,3 +111,16 @@ class FullOptionsUnitTests(BlockOptionsTestCase):
         self.block_options.title = self.DEFAULT_VALUE
         returned_options = self.block_options.full_options()
         self.assertEqual(returned_options['title'], self.DEFAULT_VALUE)
+
+
+class ReturnToOriginalDirectoryUnitTests(BlockOptionsTestCase):
+
+    def setUp(self):
+        chdir_patch = patch('wotw_highlighter.block_options.chdir')
+        self.mock_chdir = chdir_patch.start()
+        self.addCleanup(chdir_patch.stop)
+        self.build_options()
+
+    def test_proper_directory_applied(self):
+        self.block_options.return_to_launch_directory()
+        self.mock_chdir.assert_called_once_with(self.LAUNCH_DIRECTORY)
