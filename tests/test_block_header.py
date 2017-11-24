@@ -182,3 +182,21 @@ class RenderFullHeader(BlockHeaderTestCase):
         )
         output = self.header.render_full_header()
         self.assertEqual(output, desired_output)
+
+
+class StrUnitTests(BlockHeaderTestCase):
+    """Collects tests on __str__"""
+
+    def setUp(self):
+        full_patcher = patch.object(
+            BlockHeader,
+            'render_full_header',
+        )
+        self.mock_full = full_patcher.start()
+        self.addCleanup(full_patcher.stop)
+        self.construct_header()
+
+    def test_to_string(self):
+        """Ensure the test calls the full render method"""
+        self.header.__str__()
+        self.assertEqual(self.mock_full.call_count, 1)

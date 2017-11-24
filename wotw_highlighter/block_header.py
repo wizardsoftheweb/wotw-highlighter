@@ -84,3 +84,6 @@ from_file and alternate_title cannot both be empty when generating a header\
                 self.render_vcs_link_tab()
             )
         )
+
+    def __str__(self):
+        return self.render_full_header()
