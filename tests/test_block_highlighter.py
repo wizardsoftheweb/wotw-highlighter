@@ -35,9 +35,22 @@ class ValidateUnitTests(BlockHighlighterTestCase):
 
     def test_validate_without_blob(self):
         self.block_highlighter.blob = None
-        with self.assertRaises(ValueError):
+        self.block_highlighter.explicit_lexer_name = 'PythonLexer'
+        with self.assertRaisesRegexp(ValueError, 'blob'):
             self.block_highlighter.validate()
 
     def test_validate_with_blob(self):
         self.block_highlighter.blob = 'blob'
+        self.block_highlighter.explicit_lexer_name = 'PythonLexer'
         self.assertIsNone(self.block_highlighter.validate())
+
+    def test_validate_existing_lexer(self):
+        self.block_highlighter.blob = 'blob'
+        self.block_highlighter.explicit_lexer_name = 'PythonLexer'
+        self.assertIsNone(self.block_highlighter.validate())
+
+    def test_validate_nonexistent_lexer(self):
+        self.block_highlighter.blob = 'blob'
+        self.block_highlighter.explicit_lexer_name = 'qqq'
+        with self.assertRaisesRegexp(ValueError, 'lexer'):
+            self.block_highlighter.validate()
