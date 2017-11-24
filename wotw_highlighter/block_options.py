@@ -27,6 +27,8 @@ class BlockOptions(object):
     no_header = False
     title = None
 
+    working_directory = 'launch_directory'
+
     def __init__(self, **kwargs):
         """The ctor simply assigns defaults
 
@@ -55,7 +57,12 @@ class BlockOptions(object):
         for option in self.USED_KWARGS:
             if option in kwargs:
                 setattr(self, option, kwargs.get(option))
+        self.move_to_working_directory()
         self.validate()
+
+    def move_to_working_directory(self):
+        """Moves to the directory of interest"""
+        chdir(getattr(self, self.working_directory))
 
     def validate(self):  # pylint: disable=R0201
         """Overriden by children to validate options"""
@@ -70,6 +77,4 @@ class BlockOptions(object):
 
     def return_to_launch_directory(self):
         """Returns to the original directory, where the process was launched"""
-        print getcwd()
         chdir(self.launch_directory)
-        print getcwd()

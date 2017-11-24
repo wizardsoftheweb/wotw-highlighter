@@ -6,7 +6,7 @@
 from collections import defaultdict
 from unittest import TestCase
 
-from mock import patch
+from mock import call, MagicMock, patch
 
 from wotw_highlighter import BlockOptions
 
@@ -25,13 +25,18 @@ class BlockOptionsTestCase(TestCase):
         """Patches the validate method"""
         self.validate_patch = patch.object(BlockOptions, 'validate')
         self.mock_validate = self.validate_patch.start()
+        self.move_patch = patch.object(
+            BlockOptions,
+            'move_to_working_directory'
+        )
+        self.mock_move = self.move_patch.start()
 
     def schedule_ctor_patch_cleanup(self):
         """Defers removing the patch"""
         self.addCleanup(self.validate_patch.stop)
+        self.addCleanup(self.move_patch.stop)
 
     def construct_options(self, **kwargs):
-        self.patch_validate()
         getcwd_patch = patch(
             'wotw_highlighter.block_options.getcwd',
             return_value=self.LAUNCH_DIRECTORY
@@ -45,13 +50,16 @@ class BlockOptionsTestCase(TestCase):
         Patches the method in the constructor, creates the instance, and removes
         the patch
         """
+        self.patch_ctor_methods()
         self.construct_options(**kwargs)
         self.validate_patch.stop()
+        self.move_patch.stop()
 
     def build_options_retain_mocks(self, **kwargs):
         """
         Patches the method and creates the instance without removing the mock
         """
+        self.patch_ctor_methods()
         self.construct_options(**kwargs)
         self.schedule_ctor_patch_cleanup()
 
@@ -78,10 +86,31 @@ class ConstructorUnitTests(BlockOptionsTestCase):
         self.build_options_retain_mocks(**input_args)
         self.assertFalse(hasattr(self.block_options, ignored_option))
 
-    def test_validate(self):
+    def test_move_then_validate(self):
         """Ensures the validate method is called"""
-        self.build_options_with_mock_validate()
-        self.assertEquals(self.mock_validate.call_count, 1)
+        mock_holder = MagicMock()
+        self.patch_ctor_methods()
+        mock_holder.attach_mock(self.mock_move, 'move')
+        mock_holder.attach_mock(self.mock_validate, 'validate')
+        self.construct_options()
+        self.schedule_ctor_patch_cleanup()
+        mock_holder.assert_has_calls([
+            call.move(),
+            call.validate()
+        ])
+
+
+class MoveToWorkingDirectoryUnitTests(BlockOptionsTestCase):
+
+    def setUp(self):
+        chdir_patch = patch('wotw_highlighter.block_options.chdir')
+        self.mock_chdir = chdir_patch.start()
+        self.addCleanup(chdir_patch.stop)
+        self.build_options()
+
+    def test_proper_directory_applied(self):
+        self.block_options.return_to_launch_directory()
+        self.mock_chdir.assert_called_once_with(self.LAUNCH_DIRECTORY)
 
 
 class ValidateUnitTests(BlockOptionsTestCase):
