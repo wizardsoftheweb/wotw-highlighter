@@ -1,5 +1,7 @@
 """This file provides a common class used to collect all of the block options"""
 
+from os import getcwd
+
 
 class BlockOptions(object):
     """
@@ -17,6 +19,7 @@ class BlockOptions(object):
     ]
 
     blob_path = None
+    blob_working_directory = getcwd()
     external_source_link = None
     git_ref_name = None
     git_ref_hash = None
@@ -31,6 +34,8 @@ class BlockOptions(object):
         Possible parameters:
         blob_path = None
             A path to load/parse/etc
+        blob_working_directory=os.getcwd()
+            The directory to use for input commands
         external_source_link = None
             Link to the file in VCS
         git_ref_name = None
