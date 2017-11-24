@@ -1,5 +1,7 @@
 # pylint: disable=w0201
+# pylint: disable=C0103
 # pylint: disable=C0111
+# pylint: disable=W0613
 """This file collects tests for Loader"""
 
 from subprocess import CalledProcessError
@@ -171,3 +173,70 @@ class LoadFromFileUnitTests(LoaderTestCase):
     def test_nonexistant_file(self, mock_open):  # pylint: disable=W0613
         with self.assertRaises(IOError):
             self.block_loader.load_from_file()
+
+
+class DiscoverBlobHashUnitTests(LoaderTestCase):
+
+    GIT_HASH = 'qqq'
+
+    def setUp(self):
+        self.build_loader()
+        self.block_loader.git_ref_name = None
+        self.block_loader.git_ref_hash = None
+        self.block_loader.git_blob_hash = None
+        self.block_loader.blob_path = None
+
+    @patch(
+        'wotw_highlighter.block_loader.check_output',
+    )
+    def test_with_blob_hash(self, mock_check_output):
+        self.block_loader.git_blob_hash = self.GIT_HASH
+        self.block_loader.discover_blob_hash()
+        self.assertFalse(mock_check_output.called)
+        self.assertEqual(self.block_loader.git_blob_hash, self.GIT_HASH)
+
+    @patch(
+        'wotw_highlighter.block_loader.check_output',
+        return_value='mode type %s' % (GIT_HASH)
+    )
+    def test_with_ref_name_and_blob_path(self, mock_check_output):
+        self.block_loader.git_ref_name = 'git_ref_name'
+        self.block_loader.blob_path = 'blob_path'
+        self.block_loader.discover_blob_hash()
+        mock_check_output.assert_called_once_with(
+            ['git', 'ls-tree', 'git_ref_name', 'blob_path'],
+        )
+        self.assertEqual(self.block_loader.git_blob_hash, self.GIT_HASH)
+
+    @patch(
+        'wotw_highlighter.block_loader.check_output',
+        return_value='mode type %s' % (GIT_HASH)
+    )
+    def test_with_ref_hash_and_blob_path(self, mock_check_output):
+        self.block_loader.git_ref_hash = 'git_ref_hash'
+        self.block_loader.blob_path = 'blob_path'
+        self.block_loader.discover_blob_hash()
+        mock_check_output.assert_called_once_with(
+            ['git', 'ls-tree', 'git_ref_hash', 'blob_path'],
+        )
+        self.assertEqual(self.block_loader.git_blob_hash, self.GIT_HASH)
+
+    @patch(
+        'wotw_highlighter.block_loader.check_output',
+        side_effect=CalledProcessError(cmd='', returncode=1)
+    )
+    def test_failed_process(self, mock_check_output):
+        self.block_loader.git_ref_hash = 'git_ref_hash'
+        self.block_loader.blob_path = 'blob_path'
+        with self.assertRaisesRegexp(ValueError, 'Ref.*?does not contain'):
+            self.block_loader.discover_blob_hash()
+
+    @patch(
+        'wotw_highlighter.block_loader.check_output',
+        return_value='',
+    )
+    def test_empty_ls_tree(self, mock_check_output):
+        self.block_loader.git_ref_hash = 'git_ref_hash'
+        self.block_loader.blob_path = 'blob_path'
+        with self.assertRaisesRegexp(ValueError, 'Ref.*?does not contain'):
+            self.block_loader.discover_blob_hash()

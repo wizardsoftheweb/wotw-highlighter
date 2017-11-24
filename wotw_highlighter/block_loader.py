@@ -1,6 +1,8 @@
 """This file provides a class to load code"""
 from os import devnull
-from subprocess import CalledProcessError, check_call
+from subprocess import CalledProcessError, check_call, check_output
+
+import re
 
 from wotw_highlighter.block_options import BlockOptions
 
@@ -97,3 +99,26 @@ Cannot specify a ref name or hash without also specifying a blob path or hash'''
         """Loads blob_path into blob"""
         blob_file = open(self.blob_path, 'r')
         self.blob = blob_file.read()
+
+    def discover_blob_hash(self):
+        """Discovers the git blob hash from all the git attributes"""
+        if not self.git_blob_hash:
+            git_ref = (
+                self.git_ref_hash
+                if self.git_ref_hash
+                else self.git_ref_name
+            )
+            try:
+                tree_output = check_output(
+                    ['git', 'ls-tree', git_ref, self.blob_path]
+                )
+                self.git_blob_hash = re.compile(r'\s+').split(tree_output)[2]
+            except (CalledProcessError, IndexError):
+                raise ValueError(
+                    'Ref %s does not contain blob %s'
+                    % (
+                        git_ref,
+                        self.blob_path
+                    )
+                )
+        return self.git_blob_hash
