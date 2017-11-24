@@ -22,7 +22,7 @@ class LoaderTestCase(TestCase):
         """Nukes the constructed loader"""
         del self.block_loader
 
-    def build_loader(self, **kwargs):
+    def build_loader(self, *args, **kwargs):
         """Constructs a basic loader using only the defaults"""
         if not kwargs:
             kwargs = self.DEFAULT_KWARGS
@@ -30,7 +30,7 @@ class LoaderTestCase(TestCase):
         move_patcher.start()
         validate_patcher = patch.object(BlockLoader, 'validate')
         validate_patcher.start()
-        self.block_loader = BlockLoader(**kwargs)
+        self.block_loader = BlockLoader(*args, **kwargs)
         validate_patcher.stop()
         move_patcher.stop()
         self.addCleanup(self.wipe_loader)

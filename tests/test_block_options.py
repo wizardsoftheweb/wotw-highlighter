@@ -36,31 +36,31 @@ class BlockOptionsTestCase(TestCase):
         self.addCleanup(self.validate_patch.stop)
         self.addCleanup(self.move_patch.stop)
 
-    def construct_options(self, **kwargs):
+    def construct_options(self, *args, **kwargs):
         getcwd_patch = patch(
             'wotw_highlighter.block_options.getcwd',
             return_value=self.LAUNCH_DIRECTORY
         )
         getcwd_patch.start()
-        self.block_options = BlockOptions(**kwargs)
+        self.block_options = BlockOptions(*args, **kwargs)
         getcwd_patch.stop()
 
-    def build_options(self, **kwargs):
+    def build_options(self, *args, **kwargs):
         """
         Patches the method in the constructor, creates the instance, and removes
         the patch
         """
         self.patch_ctor_methods()
-        self.construct_options(**kwargs)
+        self.construct_options(*args, **kwargs)
         self.validate_patch.stop()
         self.move_patch.stop()
 
-    def build_options_retain_mocks(self, **kwargs):
+    def build_options_retain_mocks(self, *args, **kwargs):
         """
         Patches the method and creates the instance without removing the mock
         """
         self.patch_ctor_methods()
-        self.construct_options(**kwargs)
+        self.construct_options(*args, **kwargs)
         self.schedule_ctor_patch_cleanup()
 
 
@@ -98,6 +98,11 @@ class ConstructorUnitTests(BlockOptionsTestCase):
             call.move(),
             call.validate()
         ])
+
+    def test_setting_raw(self):
+        raw_args = 'raw is war'
+        self.build_options_retain_mocks(raw_args)
+        self.assertEqual(self.block_options.raw, raw_args)
 
 
 class MoveToWorkingDirectoryUnitTests(BlockOptionsTestCase):

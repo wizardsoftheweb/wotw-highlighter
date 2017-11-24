@@ -18,6 +18,7 @@ class BlockOptions(object):
         'git_blob_hash',
         'linenos',
         'no_header',
+        'raw',
         'title',
     ]
 
@@ -28,11 +29,12 @@ class BlockOptions(object):
     git_blob_hash = None
     linenos = True
     no_header = False
+    raw = None
     title = None
 
     working_directory = 'launch_directory'
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """The ctor simply assigns defaults
 
         Possible parameters:
@@ -52,9 +54,13 @@ class BlockOptions(object):
             Whether or not to generate line numbers
         no_header = False
             Skip header generation on files/named blobs
-        title=None
+        raw = None
+            Raw input pulled from the first positional argument
+        title = None
             The title to use for highlighted blobs or instead of the filename
         """
+        if args and args[0]:
+            self.raw = args[0]
         self.launch_directory = getcwd()
         self.blob_working_directory = getcwd()
         for option in self.USED_KWARGS:
