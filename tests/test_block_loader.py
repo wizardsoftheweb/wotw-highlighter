@@ -244,7 +244,7 @@ class DiscoverBlobHashUnitTests(LoaderTestCase):
 
 class LoadFromGitUnitTests(LoaderTestCase):
 
-    BLOB_HASH = '9062bb423143b519207aff1827adbba06159d827'
+    BLOB_HASH = 'qqq'
     BLOB_CONTENTS = 'raw is war'
 
     def set_hash_side_effect(self):
@@ -277,3 +277,64 @@ class LoadFromGitUnitTests(LoaderTestCase):
         self.assertIsNone(self.block_loader.blob)
         self.block_loader.load_from_git()
         self.assertEqual(self.block_loader.blob, self.BLOB_CONTENTS)
+
+
+class ParseRawAsOptionsUnitTests(LoaderTestCase):
+
+    REF = 'qqq'
+    PATH = 'path/to/file'
+
+    def setUp(self):
+        self.build_loader()
+        self.block_loader.git_ref_name = None
+        self.block_loader.git_ref_hash = None
+        self.block_loader.git_blob_hash = None
+        self.block_loader.blob_path = None
+        self.block_loader.raw = None
+
+    def test_with_different_ref_hash(self):
+        self.block_loader.raw = '%s:%s' % (self.REF, self.PATH)
+        self.block_loader.git_ref_hash = 'not-%s' % (self.REF)
+        with self.assertRaisesRegexp(ValueError, 'Parsing the positional args'):
+            self.block_loader.parse_raw_as_options()
+
+    def test_with_same_ref_hash(self):
+        self.block_loader.raw = '%s:%s' % (self.REF, self.PATH)
+        self.block_loader.git_ref_hash = self.REF
+        self.block_loader.parse_raw_as_options()
+        self.assertEqual(self.block_loader.git_ref_hash, self.REF)
+
+    def test_with_different_ref_name(self):
+        self.block_loader.raw = '%s:%s' % (self.REF, self.PATH)
+        self.block_loader.git_ref_name = 'not-%s' % (self.REF)
+        with self.assertRaisesRegexp(ValueError, 'Parsing the positional args'):
+            self.block_loader.parse_raw_as_options()
+
+    def test_with_same_ref_name(self):
+        self.block_loader.raw = '%s:%s' % (self.REF, self.PATH)
+        self.block_loader.git_ref_name = self.REF
+        self.block_loader.parse_raw_as_options()
+        self.assertEqual(self.block_loader.git_ref_name, self.REF)
+
+    def test_with_different_blob_path(self):
+        self.block_loader.raw = '%s:%s' % (self.REF, self.PATH)
+        self.block_loader.blob_path = 'not-%s' % (self.PATH)
+        with self.assertRaisesRegexp(ValueError, 'Parsing the positional args'):
+            self.block_loader.parse_raw_as_options()
+
+    def test_with_same_blob_path(self):
+        self.block_loader.raw = '%s:%s' % (self.REF, self.PATH)
+        self.block_loader.blob_path = self.PATH
+        self.block_loader.parse_raw_as_options()
+        self.assertEqual(self.block_loader.blob_path, self.PATH)
+
+    def test_with_newline_in_raw(self):
+        raw_code = (
+            '''raw is
+            war\
+            '''
+        )
+        self.block_loader.raw = raw_code
+        self.assertIsNone(self.block_loader.blob)
+        self.block_loader.parse_raw_as_options()
+        self.assertEqual(self.block_loader.blob, raw_code)

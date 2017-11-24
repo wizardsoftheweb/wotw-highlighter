@@ -15,6 +15,22 @@ class BlockLoader(BlockOptions):
 
     DEV_NULL = open(devnull, 'w+')
 
+    RAW_PATTERN = re.compile(
+        r"""
+^\s*                # allow whitespace lead
+(?:                 # no need to save this group
+    (?P<git_ref>    # save this one as git_ref
+        .+?         # anything giving back as needed
+    )
+    [ :]            # ls-tree can read ref:path or ref path
+)?
+(?P<blob_path>      # save this one as blob_path
+    [^\n]+          # assume anything leftover until a newline is the path
+)$
+""",
+        re.VERBOSE
+    )
+
     working_directory = 'blob_working_directory'
 
     def validate_git_directory(self):
@@ -129,3 +145,56 @@ Cannot specify a ref name or hash without also specifying a blob path or hash'''
         self.blob = check_output(
             ['git', 'cat-file', '-p', self.git_blob_hash]
         )
+
+    def parse_raw_as_options(self):
+        """Attempts to match '(<ref name>[ :])?blob_path' on raw"""
+        processed = re.match(self.RAW_PATTERN, self.raw)
+        if processed:
+            if processed.group('git_ref'):
+                git_ref = processed.group('git_ref')
+                if (
+                        (
+                            self.git_ref_hash
+                            and
+                            self.git_ref_hash != git_ref
+                        )
+                        or
+                        (
+                            self.git_ref_name
+                            and
+                            self.git_ref_name != git_ref
+                        )
+                ):
+                    raise ValueError(
+                        '''\
+                        Parsing the positional args (%s) yields a git ref
+                        (%s) but the keyword args define it differently
+                        (git_ref_name: '%s', git_ref_hash: '%s')\
+                        '''
+                        % (
+                            self.raw,
+                            git_ref,
+                            self.git_ref_name,
+                            self.git_ref_hash
+                        )
+                    )
+                else:
+                    self.git_ref_name = git_ref
+            if processed.group('blob_path'):
+                potential_path = processed.group('blob_path')
+                if self.blob_path and self.blob_path != potential_path:
+                    raise ValueError(
+                        '''\
+                        Parsing the positional args (%s) yields a path (%s) but
+                        the keyword args define it differently (%s)
+                        '''
+                        % (
+                            self.raw,
+                            potential_path,
+                            self.blob_path
+                        )
+                    )
+                else:
+                    self.blob_path = potential_path
+        else:
+            self.blob = self.raw
