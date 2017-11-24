@@ -10,6 +10,7 @@ class BlockOptions(object):
     USED_KWARGS = [
         'from_file',
         'linenos',
+        'no_header',
         'title',
         'vcs_branch',
         'vcs_link'
@@ -17,6 +18,7 @@ class BlockOptions(object):
 
     from_file = None
     linenos = True
+    no_header = False
     title = None
     vcs_branch = None
     vcs_link = None
