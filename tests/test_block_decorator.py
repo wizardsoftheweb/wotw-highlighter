@@ -4,7 +4,7 @@
 
 from unittest import TestCase
 
-from mock import patch
+from mock import call, patch
 
 from wotw_highlighter import BlockDecorator
 
@@ -100,3 +100,29 @@ Until <span class="s">``v1``</span>, <span class="s">``master``</span> isn&#39;t
         self.block_decorator.remove_linenos()
         self.assertEqual(
             self.block_decorator.highlighted_blob, self.WITHOUT_LINENOS)
+
+
+class CompileHeaderUnitTests(BlockDecoratorTestCase):
+    DEFAULT_OPTIONS = {
+        'highlighted_blob': 'qqq'
+    }
+
+    def setUp(self):
+        full_options_patcher = patch.object(
+            BlockDecorator,
+            'full_options',
+            return_value=self.DEFAULT_OPTIONS
+        )
+        self.mock_full_options = full_options_patcher.start()
+        self.addCleanup(full_options_patcher.stop)
+        self.build_decorator()
+
+    @patch(
+        'wotw_highlighter.block_decorator.BlockHeader'
+    )
+    def test_header_compilation(self, mock_header):
+        self.block_decorator.compile_header()
+        mock_header.assert_has_calls([
+            call(**self.DEFAULT_OPTIONS),
+            call().render_full_header()
+        ])

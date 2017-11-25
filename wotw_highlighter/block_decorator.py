@@ -3,10 +3,13 @@
 from re import sub
 
 from wotw_highlighter.block_options import BlockOptions
+from wotw_highlighter.block_header import BlockHeader
 
 
 class BlockDecorator(BlockOptions):
     """This class decorates highlighted blobs"""
+
+    header = None
 
     def validate(self):
         if not self.highlighted_blob:
@@ -19,3 +22,8 @@ class BlockDecorator(BlockOptions):
             '',
             self.highlighted_blob
         )
+
+    def compile_header(self):
+        """Compiles a block header"""
+        block_header = BlockHeader(**self.full_options())
+        self.header = block_header.render_full_header()
