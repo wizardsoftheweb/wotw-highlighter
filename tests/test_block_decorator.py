@@ -38,6 +38,20 @@ class ValidateUnitTests(BlockDecoratorTestCase):
 
     def test_with_highlighted_code(self):
         self.block_decorator.highlighted_blob = 'qqq'
+        self.block_decorator.inline_css = False
+        self.assertIsNone(self.block_decorator.validate())
+
+    def test_with_inline_and_no_styles(self):
+        self.block_decorator.highlighted_blob = 'qqq'
+        self.block_decorator.inline_css = True
+        self.block_decorator.highlighted_blob_styles = None
+        with self.assertRaisesRegexp(ValueError, 'No styles to inline'):
+            self.block_decorator.validate()
+
+    def test_with_inline_and_styles(self):
+        self.block_decorator.highlighted_blob = 'qqq'
+        self.block_decorator.inline_css = True
+        self.block_decorator.highlighted_blob_styles = 'qqq'
         self.assertIsNone(self.block_decorator.validate())
 
 

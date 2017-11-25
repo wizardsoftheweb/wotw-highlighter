@@ -14,6 +14,8 @@ class BlockDecorator(BlockOptions):
     def validate(self):
         if not self.highlighted_blob:
             raise ValueError('Nothing to decorate')
+        if self.inline_css and not self.highlighted_blob_styles:
+            raise ValueError('No styles to inline')
 
     def remove_linenos(self):
         """Removes line numbers from a highlighted blob"""
