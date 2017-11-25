@@ -41,3 +41,4 @@ These are things that I'd like to add but don't haven't added yet. It's not a ro
 * examples
 * pygit2
 * parse repo for remote to build links
+* remote parsing, i.e. ``load_from_url``
