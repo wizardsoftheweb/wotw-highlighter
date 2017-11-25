@@ -27,3 +27,11 @@ class BlockDecorator(BlockOptions):
         """Compiles a block header"""
         block_header = BlockHeader(**self.full_options())
         self.header = block_header.render_full_header()
+
+    def insert_header(self):
+        """Inserts the compiled header row in highlighted_blob"""
+        self.highlighted_blob = sub(
+            r'^(<table.*?>)(<tr)',
+            r'\1%s\2' % (self.header),
+            self.highlighted_blob
+        )

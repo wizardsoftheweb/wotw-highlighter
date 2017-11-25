@@ -126,3 +126,23 @@ class CompileHeaderUnitTests(BlockDecoratorTestCase):
             call(**self.DEFAULT_OPTIONS),
             call().render_full_header()
         ])
+
+
+class InsertHeaderUnitTests(BlockDecoratorTestCase):
+
+    WITHOUT_HEADER = "<table><tr>"
+    HEADER = "header"
+    WITH_HEADER = "<table>header<tr>"
+
+    def test_inserting_header(self):
+        self.block_decorator.highlighted_blob = self.WITHOUT_HEADER
+        self.block_decorator.header = self.HEADER
+        self.assertNotEqual(
+            self.block_decorator.highlighted_blob,
+            self.WITH_HEADER
+        )
+        self.block_decorator.insert_header()
+        self.assertEqual(
+            self.block_decorator.highlighted_blob,
+            self.WITH_HEADER
+        )
