@@ -21,3 +21,17 @@ class BlockStyler(BlockOptions):
         ) as css_file:
             styles = css_file.read()
             return styles.strip()
+
+    @staticmethod
+    def dump_additional_styles():
+        """Dumps all the additional styling"""
+        with open(
+            join(
+                dirname(__file__),
+                'data',
+                'pygments-monokai-additions.css'
+            ),
+            'r'
+        ) as css_file:
+            styles = css_file.read()
+            return styles.strip()
