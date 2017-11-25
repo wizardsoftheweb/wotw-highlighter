@@ -19,6 +19,7 @@ class BlockOptions(object):
         'git_ref_hash',
         'git_blob_hash',
         'highlighted_blob',
+        'highlighted_blob_styles',
         'linenos',
         'no_header',
         'raw',
@@ -33,6 +34,7 @@ class BlockOptions(object):
     git_ref_hash = None
     git_blob_hash = None
     highlighted_blob = None
+    highlighted_blob_styles = None
     linenos = True
     no_header = False
     raw = None
@@ -62,6 +64,8 @@ class BlockOptions(object):
             Blob hash from git
         highlighted_blob = None
             The highlighted code as an HTML string
+        highlighted_blob_styles = None
+            The styles to be applied to the highlighted_blob
         linenos = True
             Whether or not to generate line numbers
         no_header = False
