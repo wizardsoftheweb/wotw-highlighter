@@ -40,3 +40,4 @@ These are things that I'd like to add but don't haven't added yet. It's not a ro
 * font conversion
 * examples
 * pygit2
+* parse repo for remote to build links
