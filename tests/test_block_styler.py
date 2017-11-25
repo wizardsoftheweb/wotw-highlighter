@@ -82,3 +82,14 @@ class DumpAdditionalStyles(BlockStylerTestCase):
         )
         mock_open.assert_called_once_with(
             'data/pygments-monokai-additions.css', 'r')
+
+
+class DumpStyles(BlockStylerTestCase):
+    FILE_CONTENTS = 'qqq'
+
+    @patch.object(BlockStyler, 'dump_additional_styles')
+    @patch.object(BlockStyler, 'dump_pygments_styles')
+    def test_full_dump(self, mock_pygment, mock_additional):  # pylint: disable=W0613
+        BlockStyler.dump_styles()
+        mock_pygment.assert_called_once_with()
+        mock_additional.assert_called_once_with()

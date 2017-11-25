@@ -35,3 +35,12 @@ class BlockStyler(BlockOptions):
         ) as css_file:
             styles = css_file.read()
             return styles.strip()
+
+    @staticmethod
+    def dump_styles():
+        """Dumps all the style"""
+        return (
+            BlockStyler.dump_pygments_styles()
+            +
+            BlockStyler.dump_additional_styles()
+        )
