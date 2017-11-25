@@ -1,0 +1,85 @@
+.highlighttable,
+.highlight {
+    font-family: Consolas,"Courier New",monospace;
+    display: block;
+    border-radius: 5px;
+    overflow: auto;
+}
+
+.highlighttable,
+.highlighttable pre,
+.highlight,
+.highlight pre {
+    background: #272822;
+    color: #f8f8f2
+}
+
+.highlighttable pre,
+.highlight pre {
+    border: none;
+    padding: 0 10px;
+    line-height: 125%;
+    font-size: 1em;
+}
+
+.highlighttable.no-line-numbers .code-header,
+.highlighttable.no-line-numbers .linenos {
+    display: none;
+}
+
+.highlighttable .highlight pre {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.highlight pre {
+    padding: 10px;
+}
+
+.highlighttable .linenos,
+.highlighttable .code {
+    padding: 10px 0 0;
+}
+
+.highlighttable .linenos pre {
+    color: #57584f;
+    border-right: 1px solid #57584f;
+}
+
+.highlighttable .code-header {
+    height: 40px;
+    padding: 5px 0 0;
+}
+
+.highlighttable .code-header .code-tab {
+    margin: 0 30px 0 0;
+    padding: 0 5px;
+    font-size: .9em;
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    color: #57584f;
+}
+
+.highlighttable .code-tab.active,
+.highlighttable .code-tab:hover {
+    color: #f8f8f2;
+    border-bottom: 1px solid #57584f;
+}
+
+.highlighttable .code-tab a,
+.highlighttable .code-tab a:active,
+.highlighttable .code-tab a:hover,
+.highlighttable .code-tab a:link,
+.highlighttable .code-tab a:visited {
+    display: block;
+    position: relative;
+    color: inherit;
+    text-decoration: none;
+}
+
+.highlighttable .code-tab i.fa {
+    height: 35px;
+    line-height: 35px;
+    color: inherit;
+}
