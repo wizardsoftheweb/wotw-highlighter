@@ -64,6 +64,11 @@ class BlockDecorator(BlockOptions):
             premailer_runner.transform()
         )
 
+    def apply_destructive_decorations(self):
+        """Runs decorations that could possibly break others"""
+        if self.inline_css:
+            self.inline_all_css()
+
     def decorate(self):
         """Attempts to decorate the highlighted_blob"""
         if self.linenos:

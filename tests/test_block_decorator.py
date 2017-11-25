@@ -203,6 +203,21 @@ class InlineAllCssUnitTests(BlockDecoratorTestCase):
         )
 
 
+class ApplyDestructiveDecorationsUnitTests(BlockDecoratorTestCase):
+
+    @patch.object(BlockDecorator, 'inline_all_css')
+    def test_without_inline(self, mock_inline):
+        self.block_decorator.inline_css = False
+        self.block_decorator.apply_destructive_decorations()
+        self.assertFalse(mock_inline.called)
+
+    @patch.object(BlockDecorator, 'inline_all_css')
+    def test_with_inline(self, mock_inline):
+        self.block_decorator.inline_css = True
+        self.block_decorator.apply_destructive_decorations()
+        mock_inline.called.assert_called_once_with()
+
+
 class DecorateUnitTests(BlockDecoratorTestCase):
 
     def setUp(self):
