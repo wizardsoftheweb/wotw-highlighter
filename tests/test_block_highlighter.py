@@ -1,10 +1,11 @@
-# pylint: disable=C0103
-# pylint: disable=C0111
-# pylint: disable=W0613
+# pylint: disable=invalid-name
+# pylint: disable=missing-docstring
+# pylint: disable=unused-argument
+# pylint: disable=attribute-defined-outside-init
 
 from unittest import TestCase
 
-from mock import MagicMock, patch
+from mock import call, MagicMock, patch
 from pygments.formatters.html import HtmlFormatter
 from pygments.lexer import Lexer
 from pygments.lexers.python import PythonLexer
@@ -134,3 +135,30 @@ class HighlightUnitTests(BlockHighlighterTestCase):
             mock_lexer,
             mock_formatter
         )
+
+
+class AttachAndHighlightUnitTests(BlockHighlighterTestCase):
+
+    def setUp(self):
+        lexer_patcher = patch.object(BlockHighlighter, 'attach_lexer')
+        self.mock_lexer = lexer_patcher.start()
+        self.addCleanup(lexer_patcher.stop)
+        formatter_patcher = patch.object(BlockHighlighter, 'attach_formatter')
+        self.mock_formatter = formatter_patcher.start()
+        self.addCleanup(formatter_patcher.stop)
+        highlight_patcher = patch.object(BlockHighlighter, 'highlight')
+        self.mock_highlight = highlight_patcher.start()
+        self.addCleanup(highlight_patcher.stop)
+        self.build_highlighter()
+
+    def test_runner_method(self):
+        mock_container = MagicMock()
+        mock_container.attach_mock(self.mock_lexer, 'lexer')
+        mock_container.attach_mock(self.mock_formatter, 'formatter')
+        mock_container.attach_mock(self.mock_highlight, 'highlight')
+        self.block_highlighter.attach_and_highlight()
+        mock_container.assert_has_calls([
+            call.lexer(),
+            call.formatter(),
+            call.highlight()
+        ])

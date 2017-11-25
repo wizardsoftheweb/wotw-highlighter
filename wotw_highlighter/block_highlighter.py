@@ -64,3 +64,9 @@ class BlockHighlighter(BlockOptions):
             self.lexer,
             self.formatter
         )
+
+    def attach_and_highlight(self):
+        """Collects all the necessary elements to highlight blob"""
+        self.attach_lexer()
+        self.attach_formatter()
+        self.highlight()
