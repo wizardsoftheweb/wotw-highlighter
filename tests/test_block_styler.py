@@ -2,6 +2,7 @@
 # pylint: disable=C0103
 # pylint: disable=C0111
 # pylint: disable=W0613
+# pylint: disable=no-self-use
 
 # from subprocess import CalledProcessError
 from unittest import TestCase
@@ -35,9 +36,6 @@ class BlockStylerTestCase(TestCase):
 class DumpPygmentsStyles(BlockStylerTestCase):
     FILE_CONTENTS = 'qqq'
 
-    def side_effect(one, two):
-        return 'qqqq'
-
     @patch(
         'wotw_highlighter.block_styler.open',
         return_value=MagicMock(
@@ -47,10 +45,14 @@ class DumpPygmentsStyles(BlockStylerTestCase):
                 )
             )
         )
-
     )
-    def test_pygments_dump(self, mock_open):  # pylint: disable=W0613
+    @patch(
+        'wotw_highlighter.block_styler.dirname',
+        return_value=''
+    )
+    def test_pygments_dump(self, mock_dirname, mock_open):  # pylint: disable=W0613
         self.assertEqual(
             BlockStyler.dump_pygments_styles(),
             self.FILE_CONTENTS
         )
+        mock_open.assert_called_once_with('data/pygments-monokai.css', 'r')
