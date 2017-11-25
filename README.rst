@@ -1,11 +1,14 @@
 .. image:: https://badge.fury.io/py/wotw-highlighter.svg
     :target: https://badge.fury.io/py/wotw-highlighter
 
-.. image:: https://travis-ci.org/wizardsoftheweb/wotw-highlighter.svg?branch=master
+.. image:: https://travis-ci.org/wizardsoftheweb/wotw-highlighter.svg?branch=feature/patch-tests-and-naming
+
     :target: https://travis-ci.org/wizardsoftheweb/wotw-highlighter
 
-.. image:: https://coveralls.io/repos/github/wizardsoftheweb/wotw-highlighter/badge.svg?branch=master
-    :target: https://coveralls.io/github/wizardsoftheweb/wotw-highlighter?branch=master
+.. image:: https://coveralls.io/repos/github/wizardsoftheweb/wotw-highlighter/badge.svg?branch=feature/patch-tests-and-naming
+
+    :target: https://coveralls.io/github/wizardsoftheweb/wotw-highlighter?branch=feature/patch-tests-and-naming
+
 
 (if these look broken it's probably because they're connected to ``master`` branch; click through to the current release or ``dev`` results)
 
@@ -38,3 +41,5 @@ These are things that I'd like to add but don't haven't added yet. It's not a ro
 * ``less`` instead of ``css``
 * ``tmTheme`` parsing
 * font conversion
+* examples
+
