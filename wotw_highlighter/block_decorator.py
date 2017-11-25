@@ -2,6 +2,8 @@
 
 from re import sub
 
+from premailer import Premailer
+
 from wotw_highlighter.block_options import BlockOptions
 from wotw_highlighter.block_header import BlockHeader
 
@@ -36,6 +38,30 @@ class BlockDecorator(BlockOptions):
             r'^(<table.*?>)(<tr)',
             r'\1%s\2' % (self.header),
             self.highlighted_blob
+        )
+
+    def inline_all_css(self):
+        """Inlines block CSS"""
+        premailer_input = (
+            '<html>'
+            '<head>'
+            '<style>%s</style>'
+            '</head>'
+            '<body>%s</body>'
+            '</html>'
+            % (
+                self.highlighted_blob_styles,
+                self.highlighted_blob
+            )
+        )
+        premailer_runner = Premailer(
+            premailer_input,
+            disable_validation=True
+        )
+        self.highlighted_blob = sub(
+            r'^[\s\S]*?<body>([\s\S]*?)</body>[\s\S]*$',
+            r'\1',
+            premailer_runner.transform()
         )
 
     def decorate(self):

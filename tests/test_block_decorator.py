@@ -162,6 +162,47 @@ class InsertHeaderUnitTests(BlockDecoratorTestCase):
         )
 
 
+class InlineAllCssUnitTests(BlockDecoratorTestCase):
+    INPUT_BLOB = (
+        '<div>'
+        '<p>'
+        'text'
+        '</p>'
+        '<span>'
+        'markup'
+        '</span>'
+        '</div>'
+    )
+    INPUT_STYLES = (
+        'div p {'
+        ' color: purple'
+        '}'
+    )
+    OUTPUT_BLOB = (
+        '<div>\n'
+        '<p style="color:purple">'
+        'text'
+        '</p>\n'
+        '<span>'
+        'markup'
+        '</span>\n'
+        '</div>'
+    )
+
+    def test_inlining(self):
+        self.block_decorator.highlighted_blob = self.INPUT_BLOB
+        self.block_decorator.highlighted_blob_styles = self.INPUT_STYLES
+        self.assertNotEqual(
+            self.block_decorator.highlighted_blob,
+            self.OUTPUT_BLOB
+        )
+        self.block_decorator.inline_all_css()
+        self.assertEqual(
+            self.block_decorator.highlighted_blob,
+            self.OUTPUT_BLOB
+        )
+
+
 class DecorateUnitTests(BlockDecoratorTestCase):
 
     def setUp(self):
