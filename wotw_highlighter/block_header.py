@@ -42,7 +42,7 @@ blob_path and alternate_title cannot both be empty when generating a header\
 
     def render_git_ref_name_tab(self):
         """Renders the VCS branch tab"""
-        if self.git_ref_name:
+        if self.git_ref_name and 'HEAD' != self.git_ref_name:
             return self.construct_code_tab(self.git_ref_name)
         return self.RENDER_AN_OPTION_NOT_INCLUDED
 
@@ -79,8 +79,8 @@ blob_path and alternate_title cannot both be empty when generating a header\
             '</td>'
             '</tr>'
             % (
-                self.render_git_ref_name_tab(),
                 self.render_title_tab(),
+                self.render_git_ref_name_tab(),
                 self.render_external_source_link_tab()
             )
         )
