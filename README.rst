@@ -39,5 +39,4 @@ These are things that I'd like to add but don't haven't added yet. It's not a ro
 * ``tmTheme`` parsing
 * font conversion
 * examples
-* ``git`` hooks
 * pygit2
