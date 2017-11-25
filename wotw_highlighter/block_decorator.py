@@ -35,3 +35,12 @@ class BlockDecorator(BlockOptions):
             r'\1%s\2' % (self.header),
             self.highlighted_blob
         )
+
+    def decorate(self):
+        """Attempts to decorate the highlighted_blob"""
+        if self.linenos:
+            if not self.no_header and (self.blob_path or self.title):
+                self.compile_header()
+                self.insert_header()
+        else:
+            self.remove_linenos()

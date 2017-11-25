@@ -146,3 +146,58 @@ class InsertHeaderUnitTests(BlockDecoratorTestCase):
             self.block_decorator.highlighted_blob,
             self.WITH_HEADER
         )
+
+
+class DecorateUnitTests(BlockDecoratorTestCase):
+
+    def setUp(self):
+        compile_patcher = patch.object(BlockDecorator, 'compile_header')
+        self.mock_compile = compile_patcher.start()
+        self.addCleanup(compile_patcher.stop)
+        insert_patcher = patch.object(BlockDecorator, 'insert_header')
+        self.mock_insert = insert_patcher.start()
+        self.addCleanup(insert_patcher.stop)
+        remove_patcher = patch.object(BlockDecorator, 'remove_linenos')
+        self.mock_remove = remove_patcher.start()
+        self.addCleanup(remove_patcher.stop)
+        self.build_decorator()
+
+    def test_with_everything(self):
+        self.block_decorator.linenos = True
+        self.block_decorator.no_header = False
+        self.block_decorator.blob_path = 'some/path'
+        self.block_decorator.title = 'title'
+        self.block_decorator.decorate()
+        self.mock_compile.assert_called_once_with()
+        self.mock_insert.assert_called_once_with()
+        self.assertFalse(self.mock_remove.called)
+
+    def test_without_linenos(self):
+        self.block_decorator.linenos = False
+        self.block_decorator.no_header = False
+        self.block_decorator.blob_path = 'some/path'
+        self.block_decorator.title = 'title'
+        self.block_decorator.decorate()
+        self.assertFalse(self.mock_compile.called)
+        self.assertFalse(self.mock_insert.called)
+        self.mock_remove.assert_called_once_with()
+
+    def test_without_header(self):
+        self.block_decorator.linenos = True
+        self.block_decorator.no_header = True
+        self.block_decorator.blob_path = 'some/path'
+        self.block_decorator.title = 'title'
+        self.block_decorator.decorate()
+        self.assertFalse(self.mock_compile.called)
+        self.assertFalse(self.mock_insert.called)
+        self.assertFalse(self.mock_remove.called)
+
+    def test_without_any_title(self):
+        self.block_decorator.linenos = True
+        self.block_decorator.no_header = False
+        self.block_decorator.blob_path = None
+        self.block_decorator.title = None
+        self.block_decorator.decorate()
+        self.assertFalse(self.mock_compile.called)
+        self.assertFalse(self.mock_insert.called)
+        self.assertFalse(self.mock_remove.called)
