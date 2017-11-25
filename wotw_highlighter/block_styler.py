@@ -44,3 +44,7 @@ class BlockStyler(BlockOptions):
             +
             BlockStyler.dump_additional_styles()
         )
+
+    def set_styles(self):
+        """Assigns styles to the BlockOptions chain"""
+        self.highlighted_blob_styles = self.dump_styles()

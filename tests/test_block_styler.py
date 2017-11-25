@@ -93,3 +93,17 @@ class DumpStyles(BlockStylerTestCase):
         BlockStyler.dump_styles()
         mock_pygment.assert_called_once_with()
         mock_additional.assert_called_once_with()
+
+
+class SetStyles(BlockStylerTestCase):
+    STYLES = '.rad-style { color: the-best; }'
+
+    @patch.object(BlockStyler, 'dump_styles', return_value=STYLES)
+    def test_full_dump(self, mock_dump):  # pylint: disable=W0613
+        self.block_styler.highlighted_blob_styles = None
+        self.block_styler.set_styles()
+        mock_dump.assert_called_once_with()
+        self.assertEqual(
+            self.block_styler.highlighted_blob_styles,
+            self.STYLES
+        )
