@@ -215,7 +215,7 @@ class ApplyDestructiveDecorationsUnitTests(BlockDecoratorTestCase):
     def test_with_inline(self, mock_inline):
         self.block_decorator.inline_css = True
         self.block_decorator.apply_destructive_decorations()
-        mock_inline.called.assert_called_once_with()
+        mock_inline.assert_called_once_with()
 
 
 class DecorateUnitTests(BlockDecoratorTestCase):
@@ -230,6 +230,12 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         remove_patcher = patch.object(BlockDecorator, 'remove_linenos')
         self.mock_remove = remove_patcher.start()
         self.addCleanup(remove_patcher.stop)
+        apply_patcher = patch.object(
+            BlockDecorator,
+            'apply_destructive_decorations'
+        )
+        self.mock_destructive = apply_patcher.start()
+        self.addCleanup(apply_patcher.stop)
         self.build_decorator()
 
     def test_with_everything(self):
@@ -241,6 +247,7 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         self.mock_compile.assert_called_once_with()
         self.mock_insert.assert_called_once_with()
         self.assertFalse(self.mock_remove.called)
+        self.mock_destructive.assert_called_once_with()
 
     def test_without_linenos(self):
         self.block_decorator.linenos = False
@@ -251,6 +258,7 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         self.assertFalse(self.mock_compile.called)
         self.assertFalse(self.mock_insert.called)
         self.mock_remove.assert_called_once_with()
+        self.mock_destructive.assert_called_once_with()
 
     def test_without_header(self):
         self.block_decorator.linenos = True
@@ -261,6 +269,7 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         self.assertFalse(self.mock_compile.called)
         self.assertFalse(self.mock_insert.called)
         self.assertFalse(self.mock_remove.called)
+        self.mock_destructive.assert_called_once_with()
 
     def test_without_any_title(self):
         self.block_decorator.linenos = True
@@ -271,3 +280,4 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         self.assertFalse(self.mock_compile.called)
         self.assertFalse(self.mock_insert.called)
         self.assertFalse(self.mock_remove.called)
+        self.mock_destructive.assert_called_once_with()

@@ -77,3 +77,4 @@ class BlockDecorator(BlockOptions):
                 self.insert_header()
         else:
             self.remove_linenos()
+        self.apply_destructive_decorations()
