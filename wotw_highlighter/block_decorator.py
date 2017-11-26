@@ -2,6 +2,8 @@
 
 from re import sub
 
+from premailer import Premailer
+
 from wotw_highlighter.block_options import BlockOptions
 from wotw_highlighter.block_header import BlockHeader
 
@@ -14,6 +16,8 @@ class BlockDecorator(BlockOptions):
     def validate(self):
         if not self.highlighted_blob:
             raise ValueError('Nothing to decorate')
+        if self.inline_css and not self.highlighted_blob_styles:
+            raise ValueError('No styles to inline')
 
     def remove_linenos(self):
         """Removes line numbers from a highlighted blob"""
@@ -36,6 +40,35 @@ class BlockDecorator(BlockOptions):
             self.highlighted_blob
         )
 
+    def inline_all_css(self):
+        """Inlines block CSS"""
+        premailer_input = (
+            '<html>'
+            '<head>'
+            '<style>%s</style>'
+            '</head>'
+            '<body>%s</body>'
+            '</html>'
+            % (
+                self.highlighted_blob_styles,
+                self.highlighted_blob
+            )
+        )
+        premailer_runner = Premailer(
+            premailer_input,
+            disable_validation=True
+        )
+        self.highlighted_blob = sub(
+            r'^[\s\S]*?<body>([\s\S]*?)</body>[\s\S]*$',
+            r'\1',
+            premailer_runner.transform()
+        )
+
+    def apply_destructive_decorations(self):
+        """Runs decorations that could possibly break others"""
+        if self.inline_css:
+            self.inline_all_css()
+
     def decorate(self):
         """Attempts to decorate the highlighted_blob"""
         if self.linenos:
@@ -44,3 +77,4 @@ class BlockDecorator(BlockOptions):
                 self.insert_header()
         else:
             self.remove_linenos()
+        self.apply_destructive_decorations()

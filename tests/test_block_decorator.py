@@ -38,6 +38,20 @@ class ValidateUnitTests(BlockDecoratorTestCase):
 
     def test_with_highlighted_code(self):
         self.block_decorator.highlighted_blob = 'qqq'
+        self.block_decorator.inline_css = False
+        self.assertIsNone(self.block_decorator.validate())
+
+    def test_with_inline_and_no_styles(self):
+        self.block_decorator.highlighted_blob = 'qqq'
+        self.block_decorator.inline_css = True
+        self.block_decorator.highlighted_blob_styles = None
+        with self.assertRaisesRegexp(ValueError, 'No styles to inline'):
+            self.block_decorator.validate()
+
+    def test_with_inline_and_styles(self):
+        self.block_decorator.highlighted_blob = 'qqq'
+        self.block_decorator.inline_css = True
+        self.block_decorator.highlighted_blob_styles = 'qqq'
         self.assertIsNone(self.block_decorator.validate())
 
 
@@ -148,6 +162,62 @@ class InsertHeaderUnitTests(BlockDecoratorTestCase):
         )
 
 
+class InlineAllCssUnitTests(BlockDecoratorTestCase):
+    INPUT_BLOB = (
+        '<div>'
+        '<p>'
+        'text'
+        '</p>'
+        '<span>'
+        'markup'
+        '</span>'
+        '</div>'
+    )
+    INPUT_STYLES = (
+        'div p {'
+        ' color: purple'
+        '}'
+    )
+    OUTPUT_BLOB = (
+        '<div>\n'
+        '<p style="color:purple">'
+        'text'
+        '</p>\n'
+        '<span>'
+        'markup'
+        '</span>\n'
+        '</div>'
+    )
+
+    def test_inlining(self):
+        self.block_decorator.highlighted_blob = self.INPUT_BLOB
+        self.block_decorator.highlighted_blob_styles = self.INPUT_STYLES
+        self.assertNotEqual(
+            self.block_decorator.highlighted_blob,
+            self.OUTPUT_BLOB
+        )
+        self.block_decorator.inline_all_css()
+        self.assertEqual(
+            self.block_decorator.highlighted_blob,
+            self.OUTPUT_BLOB
+        )
+
+
+class ApplyDestructiveDecorationsUnitTests(BlockDecoratorTestCase):
+
+    @patch.object(BlockDecorator, 'inline_all_css')
+    def test_without_inline(self, mock_inline):
+        self.block_decorator.inline_css = False
+        self.block_decorator.apply_destructive_decorations()
+        self.assertFalse(mock_inline.called)
+
+    @patch.object(BlockDecorator, 'inline_all_css')
+    def test_with_inline(self, mock_inline):
+        self.block_decorator.inline_css = True
+        self.block_decorator.apply_destructive_decorations()
+        mock_inline.assert_called_once_with()
+
+
 class DecorateUnitTests(BlockDecoratorTestCase):
 
     def setUp(self):
@@ -160,6 +230,12 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         remove_patcher = patch.object(BlockDecorator, 'remove_linenos')
         self.mock_remove = remove_patcher.start()
         self.addCleanup(remove_patcher.stop)
+        apply_patcher = patch.object(
+            BlockDecorator,
+            'apply_destructive_decorations'
+        )
+        self.mock_destructive = apply_patcher.start()
+        self.addCleanup(apply_patcher.stop)
         self.build_decorator()
 
     def test_with_everything(self):
@@ -171,6 +247,7 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         self.mock_compile.assert_called_once_with()
         self.mock_insert.assert_called_once_with()
         self.assertFalse(self.mock_remove.called)
+        self.mock_destructive.assert_called_once_with()
 
     def test_without_linenos(self):
         self.block_decorator.linenos = False
@@ -181,6 +258,7 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         self.assertFalse(self.mock_compile.called)
         self.assertFalse(self.mock_insert.called)
         self.mock_remove.assert_called_once_with()
+        self.mock_destructive.assert_called_once_with()
 
     def test_without_header(self):
         self.block_decorator.linenos = True
@@ -191,6 +269,7 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         self.assertFalse(self.mock_compile.called)
         self.assertFalse(self.mock_insert.called)
         self.assertFalse(self.mock_remove.called)
+        self.mock_destructive.assert_called_once_with()
 
     def test_without_any_title(self):
         self.block_decorator.linenos = True
@@ -201,3 +280,4 @@ class DecorateUnitTests(BlockDecoratorTestCase):
         self.assertFalse(self.mock_compile.called)
         self.assertFalse(self.mock_insert.called)
         self.assertFalse(self.mock_remove.called)
+        self.mock_destructive.assert_called_once_with()
