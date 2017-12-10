@@ -10,3 +10,4 @@ from .block_loader import BlockLoader
 from .block_highlighter import BlockHighlighter
 from .block_decorator import BlockDecorator
 from .block_styler import BlockStyler
+from .block import Block
