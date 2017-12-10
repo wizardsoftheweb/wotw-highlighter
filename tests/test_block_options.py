@@ -1,5 +1,6 @@
 # pylint: disable=C0103
 # pylint: disable=C0111
+# pylint: disable=W0201
 """Collects tests for BlockOptions"""
 
 from collections import defaultdict
@@ -22,6 +23,8 @@ class BlockOptionsTestCase(TestCase):
 
     def patch_ctor_methods(self):
         """Patches the validate method"""
+        self.update_patch = patch.object(BlockOptions, 'update_options')
+        self.mock_update = self.update_patch.start()
         self.validate_patch = patch.object(BlockOptions, 'validate')
         self.mock_validate = self.validate_patch.start()
         self.move_patch = patch.object(
@@ -32,6 +35,7 @@ class BlockOptionsTestCase(TestCase):
 
     def schedule_ctor_patch_cleanup(self):
         """Defers removing the patch"""
+        self.addCleanup(self.update_patch.stop)
         self.addCleanup(self.validate_patch.stop)
         self.addCleanup(self.move_patch.stop)
 
@@ -51,6 +55,7 @@ class BlockOptionsTestCase(TestCase):
         """
         self.patch_ctor_methods()
         self.construct_options(*args, **kwargs)
+        self.update_patch.stop()
         self.validate_patch.stop()
         self.move_patch.stop()
 
@@ -65,25 +70,6 @@ class BlockOptionsTestCase(TestCase):
 
 class ConstructorUnitTests(BlockOptionsTestCase):
     """Tests the constructor"""
-
-    def test_consumed_options(self):
-        """Ensures all valid options can be set"""
-        for option in BlockOptions.USED_KWARGS:
-            input_args = defaultdict()
-            input_args[option] = self.DEFAULT_VALUE
-            self.build_options_retain_mocks(**input_args)
-            self.assertEqual(
-                getattr(self.block_options, option),
-                self.DEFAULT_VALUE
-            )
-
-    def test_ignored_args(self):
-        """Ensures other options are ignored"""
-        ignored_option = 'zzz'
-        input_args = defaultdict()
-        input_args[ignored_option] = self.DEFAULT_VALUE
-        self.build_options_retain_mocks(**input_args)
-        self.assertFalse(hasattr(self.block_options, ignored_option))
 
     def test_move_then_validate(self):
         """Ensures the validate method is called"""
@@ -102,6 +88,34 @@ class ConstructorUnitTests(BlockOptionsTestCase):
         raw_args = 'raw is war'
         self.build_options_retain_mocks(raw_args)
         self.assertEqual(self.block_options.raw, raw_args)
+
+
+class UpdateOptionsUnitTests(BlockOptionsTestCase):
+
+    def setUp(self):
+        chdir_patch = patch('wotw_highlighter.block_options.chdir')
+        self.mock_chdir = chdir_patch.start()
+        self.addCleanup(chdir_patch.stop)
+        self.build_options()
+
+    def test_consumed_options(self):
+        """Ensures all valid options can be set"""
+        for option in BlockOptions.USED_KWARGS:
+            input_args = defaultdict()
+            input_args[option] = self.DEFAULT_VALUE
+            self.block_options.update_options(**input_args)
+            self.assertEqual(
+                getattr(self.block_options, option),
+                self.DEFAULT_VALUE
+            )
+
+    def test_ignored_args(self):
+        """Ensures other options are ignored"""
+        ignored_option = 'zzz'
+        input_args = defaultdict()
+        input_args[ignored_option] = self.DEFAULT_VALUE
+        self.block_options.update_options(**input_args)
+        self.assertFalse(hasattr(self.block_options, ignored_option))
 
 
 class MoveToWorkingDirectoryUnitTests(BlockOptionsTestCase):
