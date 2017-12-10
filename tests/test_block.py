@@ -59,7 +59,6 @@ class LoadUnitTests(BlockTestCase):
         'wotw_highlighter.block.BlockLoader'
     )
     def test_load(self, mock_loader):
-        # mock_loader_load = MagicMock()
         mock_loader.return_value = MagicMock(
             load=MagicMock(),
             full_options=MagicMock(
@@ -70,6 +69,28 @@ class LoadUnitTests(BlockTestCase):
         mock_loader.assert_has_calls([
             call(**BlockTestCase.PARENT_OPTIONS),
             call().load(),
+            call().full_options()
+        ])
+        self.mock_update.assert_called_once_with(**BlockTestCase.CHILD_OPTIONS)
+
+
+class HighlightUnitTests(BlockTestCase):
+
+    @patch(
+        'wotw_highlighter.block.BlockHighlighter'
+    )
+    def test_highlight(self, mock_highlighter):
+        mock_highlighter.return_value = MagicMock(
+            full_options=MagicMock(
+                return_value=BlockTestCase.CHILD_OPTIONS
+            )
+        )
+        self.block.highlight()
+        mock_highlighter.assert_has_calls([
+            call(**BlockTestCase.PARENT_OPTIONS),
+            call().attach_lexer(),
+            call().attach_formatter(),
+            call().highlight(),
             call().full_options()
         ])
         self.mock_update.assert_called_once_with(**BlockTestCase.CHILD_OPTIONS)
