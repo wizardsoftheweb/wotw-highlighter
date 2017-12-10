@@ -4,6 +4,7 @@ from wotw_highlighter.block_options import BlockOptions
 from wotw_highlighter.block_loader import BlockLoader
 from wotw_highlighter.block_highlighter import BlockHighlighter
 from wotw_highlighter.block_styler import BlockStyler
+from wotw_highlighter.block_decorator import BlockDecorator
 
 
 class Block(BlockOptions):
@@ -28,3 +29,9 @@ class Block(BlockOptions):
         styled_block = BlockStyler(**self.full_options())
         styled_block.set_styles()
         self.update_options(**styled_block.full_options())
+
+    def decorate(self):
+        """Applies any decorations"""
+        decorated_block = BlockDecorator(**self.full_options())
+        decorated_block.decorate()
+        self.update_options(**decorated_block.full_options())
