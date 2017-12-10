@@ -1,6 +1,7 @@
 # pylint: disable=C0103
 # pylint: disable=C0111
 # pylint: disable=W0613
+# pylint: disable=W0201
 
 from unittest import TestCase
 
@@ -22,10 +23,19 @@ class BlockTestCase(TestCase):
     }
 
     def setUp(self):
+        self.patch_ctor_methods()
         self.build_block()
+        self.addCleanup(self.ctor_patch_cleanup)
 
     def wipe_block(self):
         del self.block
+
+    def patch_ctor_methods(self):
+        self.compile_patcher = patch.object(Block, 'compile')
+        self.mock_compile = self.compile_patcher.start()
+
+    def ctor_patch_cleanup(self):
+        self.compile_patcher.stop()
 
     def build_block(self, *args, **kwargs):
         update_patcher = patch.object(Block, 'update_options')
@@ -137,6 +147,11 @@ class DecorateUnitTests(BlockTestCase):
 
 
 class CompileUnitTests(BlockTestCase):
+
+    def setUp(self):
+        self.patch_ctor_methods()
+        self.build_block()
+        self.ctor_patch_cleanup()
 
     @patch.object(Block, 'load')
     @patch.object(Block, 'highlight')
