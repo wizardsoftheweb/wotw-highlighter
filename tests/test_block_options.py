@@ -89,7 +89,9 @@ class ConstructorUnitTests(BlockOptionsTestCase):
         self.build_options_retain_mocks(raw_args)
         self.assertEqual(self.block_options.raw, raw_args)
 
+
 class UpdateOptionsUnitTests(BlockOptionsTestCase):
+
     def setUp(self):
         chdir_patch = patch('wotw_highlighter.block_options.chdir')
         self.mock_chdir = chdir_patch.start()
