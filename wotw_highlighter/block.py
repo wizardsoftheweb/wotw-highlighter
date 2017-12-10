@@ -10,6 +10,10 @@ from wotw_highlighter.block_decorator import BlockDecorator
 class Block(BlockOptions):
     """This class loads code, highlights, and returns a polished block"""
 
+    def __init__(self, *args, **kwargs):
+        super(Block, self).__init__(*args, **kwargs)
+        self.compile()
+
     def load(self):
         """Loads the block"""
         loaded_block = BlockLoader(**self.full_options())
