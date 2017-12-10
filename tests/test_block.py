@@ -4,29 +4,72 @@
 
 from unittest import TestCase
 
-from mock import patch
+from mock import call, MagicMock, patch
 
 from wotw_highlighter import Block
 
 
 class BlockTestCase(TestCase):
 
+    PARENT_OPTIONS = {
+        'common': 'same',
+        'shared': 'parent'
+    }
+
+    CHILD_OPTIONS = {
+        'common': 'same',
+        'shared': 'child'
+    }
+
     def setUp(self):
         self.build_block()
 
     def wipe_block(self):
-        del self.block_decorator
+        del self.block
 
     def build_block(self, *args, **kwargs):
         update_patcher = patch.object(Block, 'update_options')
-        update_patcher.start()
+        self.mock_update = update_patcher.start()
+        self.addCleanup(update_patcher.stop)
+        full_options_patcher = patch.object(
+            Block,
+            'full_options',
+            return_value=self.PARENT_OPTIONS
+        )
+        self.mock_full_options = full_options_patcher.start()
+        self.addCleanup(full_options_patcher.stop)
         move_patcher = patch.object(
-            Block, 'move_to_working_directory')
+            Block,
+            'move_to_working_directory'
+        )
         move_patcher.start()
         validate_patcher = patch.object(Block, 'validate')
         validate_patcher.start()
-        self.block_decorator = Block(*args, **kwargs)
+        self.block = Block(*args, **kwargs)
         validate_patcher.stop()
         move_patcher.stop()
-        update_patcher.stop()
+        self.mock_update.reset_mock()
+        self.mock_full_options.reset_mock()
         self.addCleanup(self.wipe_block)
+
+
+class LoadUnitTests(BlockTestCase):
+
+    @patch(
+        'wotw_highlighter.block.BlockLoader'
+    )
+    def test_load(self, mock_loader):
+        # mock_loader_load = MagicMock()
+        mock_loader.return_value = MagicMock(
+            load=MagicMock(),
+            full_options=MagicMock(
+                return_value=BlockTestCase.CHILD_OPTIONS
+            )
+        )
+        self.block.load()
+        mock_loader.assert_has_calls([
+            call(**BlockTestCase.PARENT_OPTIONS),
+            call().load(),
+            call().full_options()
+        ])
+        self.mock_update.assert_called_once_with(**BlockTestCase.CHILD_OPTIONS)
