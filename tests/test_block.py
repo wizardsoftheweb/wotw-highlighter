@@ -63,6 +63,17 @@ class BlockTestCase(TestCase):
         self.addCleanup(self.wipe_block)
 
 
+class ConstructorUnitTests(BlockTestCase):
+
+    def setUp(self):
+        self.patch_ctor_methods()
+        self.addCleanup(self.ctor_patch_cleanup)
+
+    def test_compile_call(self):
+        self.build_block()
+        self.mock_compile.assert_called_once_with()
+
+
 class LoadUnitTests(BlockTestCase):
 
     @patch(
