@@ -134,3 +134,24 @@ class DecorateUnitTests(BlockTestCase):
             call().full_options()
         ])
         self.mock_update.assert_called_once_with(**BlockTestCase.CHILD_OPTIONS)
+
+
+class CompileUnitTests(BlockTestCase):
+
+    @patch.object(Block, 'load')
+    @patch.object(Block, 'highlight')
+    @patch.object(Block, 'style')
+    @patch.object(Block, 'decorate')
+    def test_compile(self, mock_decorate, mock_style, mock_highlight, mock_load):
+        runner = MagicMock()
+        runner.attach_mock(mock_load, 'load')
+        runner.attach_mock(mock_highlight, 'highlight')
+        runner.attach_mock(mock_style, 'style')
+        runner.attach_mock(mock_decorate, 'decorate')
+        self.block.compile()
+        runner.assert_has_calls([
+            call.load(),
+            call.highlight(),
+            call.style(),
+            call.decorate()
+        ])
