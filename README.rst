@@ -35,6 +35,7 @@ Wishlist
 
 These are things that I'd like to add but don't haven't added yet. It's not a roadmap; I don't have a release schedule.
 
+* Logging
 * ``less`` instead of ``css``
 * ``tmTheme`` parsing
 * font conversion
