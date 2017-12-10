@@ -181,3 +181,13 @@ class CompileUnitTests(BlockTestCase):
             call.style(),
             call.decorate()
         ])
+
+
+class RenderedUnitTests(BlockTestCase):
+
+    BLOB = 'qqq'
+
+    def test_rendered(self):
+        self.block.highlighted_blob = self.BLOB
+        self.assertEquals(self.block.rendered, self.BLOB)
+        self.assertEquals(self.block.highlighted_blob, self.block.rendered)
