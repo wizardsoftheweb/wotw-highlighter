@@ -50,3 +50,8 @@ class Block(BlockOptions):
         self.highlight()
         self.style()
         self.decorate()
+
+    @property
+    def rendered(self):
+        """Returns the highlighted block"""
+        return self.highlighted_blob
