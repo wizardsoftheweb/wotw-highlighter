@@ -35,3 +35,14 @@ class Block(BlockOptions):
         decorated_block = BlockDecorator(**self.full_options())
         decorated_block.decorate()
         self.update_options(**decorated_block.full_options())
+
+    def compile(self):
+        """
+        Runs all the block actions
+
+        EXECUTION ORDER MATTERS
+        """
+        self.load()
+        self.highlight()
+        self.style()
+        self.decorate()
