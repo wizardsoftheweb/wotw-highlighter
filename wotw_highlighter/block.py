@@ -3,6 +3,7 @@
 from wotw_highlighter.block_options import BlockOptions
 from wotw_highlighter.block_loader import BlockLoader
 from wotw_highlighter.block_highlighter import BlockHighlighter
+from wotw_highlighter.block_styler import BlockStyler
 
 
 class Block(BlockOptions):
@@ -21,3 +22,9 @@ class Block(BlockOptions):
         highlighted_block.attach_formatter()
         highlighted_block.highlight()
         self.update_options(**highlighted_block.full_options())
+
+    def style(self):
+        """Styles the block"""
+        styled_block = BlockStyler(**self.full_options())
+        styled_block.set_styles()
+        self.update_options(**styled_block.full_options())
