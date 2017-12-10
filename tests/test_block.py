@@ -114,3 +114,23 @@ class StyleUnitTests(BlockTestCase):
             call().full_options()
         ])
         self.mock_update.assert_called_once_with(**BlockTestCase.CHILD_OPTIONS)
+
+
+class DecorateUnitTests(BlockTestCase):
+
+    @patch(
+        'wotw_highlighter.block.BlockDecorator'
+    )
+    def test_decorate(self, mock_decorator):
+        mock_decorator.return_value = MagicMock(
+            full_options=MagicMock(
+                return_value=BlockTestCase.CHILD_OPTIONS
+            )
+        )
+        self.block.decorate()
+        mock_decorator.assert_has_calls([
+            call(**BlockTestCase.PARENT_OPTIONS),
+            call().decorate(),
+            call().full_options()
+        ])
+        self.mock_update.assert_called_once_with(**BlockTestCase.CHILD_OPTIONS)
