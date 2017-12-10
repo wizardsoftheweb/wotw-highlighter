@@ -83,11 +83,15 @@ class BlockOptions(object):
             self.raw = args[0]
         self.launch_directory = getcwd()
         self.blob_working_directory = getcwd()
+        self.update_options(**kwargs)
+        self.move_to_working_directory()
+        self.validate()
+
+    def update_options(self, **kwargs):
+        """Updates any passed in kwargs; does nothing without values"""
         for option in self.USED_KWARGS:
             if option in kwargs:
                 setattr(self, option, kwargs.get(option))
-        self.move_to_working_directory()
-        self.validate()
 
     def move_to_working_directory(self):
         """Moves to the directory of interest"""
