@@ -396,7 +396,7 @@ class LoadUnitTests(BlockLoaderTestCase):
         self.block_loader.raw = self.RAW_INPUT
         self.block_loader.git_blob_hash = self.RAW_INPUT
         self.mock_load_git.side_effect = ValueError
-        self.mock_load_file.side_effect = ValueError
+        self.mock_load_file.side_effect = IOError
         self.assertNotEqual(self.block_loader.blob, self.RAW_INPUT)
         output = self.block_loader.load()
         self.assertEqual(output, self.RAW_INPUT)
@@ -407,7 +407,7 @@ class LoadUnitTests(BlockLoaderTestCase):
     def test_everything_failed(self):
         self.block_loader.raw = None
         self.mock_load_git.side_effect = ValueError
-        self.mock_load_file.side_effect = ValueError
+        self.mock_load_file.side_effect = IOError
         with self.assertRaisesRegexp(ValueError, 'Unable'):
             self.block_loader.load()
         self.mock_parse.assert_called_once_with()

@@ -213,7 +213,7 @@ Cannot specify a ref name or hash without also specifying a blob path or hash'''
         try:
             self.load_from_file()
             return self.blob
-        except ValueError:
+        except IOError:
             pass
 
         if self.raw:
