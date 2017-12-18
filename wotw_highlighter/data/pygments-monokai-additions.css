@@ -10,7 +10,7 @@ div.highlight {
 
 table.highlighttable tr > td {
     background-image: none;
-    background-size: auto auto;
+    /* background-size: auto auto; */
     background-position: center;
     background-repeat: no-repeat;
 }
