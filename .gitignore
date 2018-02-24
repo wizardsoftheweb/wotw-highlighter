@@ -108,3 +108,4 @@ venv.bak/
 # Personal stuff
 *.sublime-*
 scratch.py
+scratch*
