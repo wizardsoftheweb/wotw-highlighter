@@ -17,7 +17,8 @@ class BlockHighlighter(BlockOptions):
     }
 
     DEFAULT_HTMLFORMATTER_OPTIONS = {
-        'linenos': True
+        'linenos': True,
+        'lineseparator': '<br />'
     }
 
     lexer = None
