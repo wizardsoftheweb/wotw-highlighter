@@ -150,7 +150,7 @@ class FullOptionsUnitTests(BlockOptionsTestCase):
         """Ensure it returns all the important options"""
         returned_options = self.block_options.full_options()
         for key in BlockOptions.USED_KWARGS:
-            self.assertTrue(returned_options.has_key(key))
+            self.assertTrue(key in returned_options)
 
     def test_returns_proper_options(self):
         """Ensure it returns the proper values"""
