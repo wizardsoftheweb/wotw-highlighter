@@ -9,7 +9,10 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={
-        '': ['VERSION']
+        '': [
+            'VERSION',
+            'data/*.css'
+        ]
     },
     include_package_data=True
 )

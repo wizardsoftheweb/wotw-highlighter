@@ -1,0 +1,58 @@
+Script started on Sun 31 Dec 2017 06:51:41 AM UTC
+[1m[7m%[27m[1m[0m                                                                                                                                                                                                                                                [0m[27m[24m[J
+[40m[39m [34mcjharries[31m@[32mwizardsoftheweb1[39m [44m[30m[30m ~ [49m[34m[39m
+  [K[227C[34m[[32m06:51:41[34m][39m[237D[?1h=[A[A[0m[27m[24m[J
+[40m[39m [34mcjharries[31m@[32mwizardsoftheweb1[39m [44m[30m[30m ~ [49m[34m[39m
+ [1m[34m❯[39m[0m [K[226C[34m[[32m06:51:41[34m][39m[236Dlll[?1l>[A[A[0m[27m[24m[J
+[40m[39m [34mcjharries[31m@[32mwizardsoftheweb1[39m [44m[30m[30m ~ [49m[34m[39m
+ [1m[34m❯[39m[0m ll[K[224C[34m[[32m06:51:47[34m][39m[234D
+total 2884
+drwx------   16 cjharries cjharries    4096 Dec 31 06:51 [0m[01;34m.[0m
+drwxr-xr-x.   4 root      root         4096 Sep  4 21:41 [01;34m..[0m
+drwx------    4 cjharries cjharries    4096 Dec 12 02:05 [01;34m.cache[0m
+drwxrwxr-x    4 cjharries cjharries    4096 Dec 12 02:19 [01;34m.config[0m
+drwxrwxrwx    2 cjharries cjharries    4096 Aug 20 13:42 [34;42mfonts[0m
+drwx------    4 cjharries cjharries    4096 Nov 13 01:40 [01;34m.local[0m
+drwxrwxr-x    3 cjharries cjharries    4096 May 28  2017 [01;34m.nano[0m
+drwxrwxr-x  821 cjharries cjharries   28672 Dec 12 02:36 [01;34m.npm[0m
+drwxrw----    3 cjharries cjharries    4096 May 28  2017 [01;34m.pki[0m
+drwxrwxrwx    3 cjharries cjharries    4096 Aug 19 19:55 [34;42mpublic[0m
+drwxr-xr-x    3 cjharries cjharries    4096 Aug 19 18:34 [01;34mseltzer2[0m
+drwx------    2 cjharries cjharries    4096 May 28  2017 [01;34m.ssh[0m
+drwxrwxr-x    3 cjharries cjharries    4096 Dec 29 15:14 [01;34msupplemental-shirk[0m
+drwxrwxr-x    3 cjharries cjharries    4096 Sep 18 00:24 [01;34mtest[0m
+drwxrwxr-x    3 cjharries cjharries    4096 Dec 12 02:17 [01;34m.yarn[0m
+drwxrwxr-x    6 cjharries cjharries    4096 May 28  2017 [01;34m.zprezto[0m
+-rw-------    1 cjharries cjharries      32 May 28  2017 .bash_history
+-rw-r--r--    1 cjharries cjharries      18 Dec  6  2016 .bash_logout
+-rw-r--r--    1 cjharries cjharries     193 Dec  6  2016 .bash_profile
+-rw-r--r--    1 cjharries cjharries     231 Dec  6  2016 .bashrc
+-rwxr-xr-x    1 cjharries cjharries 1712839 Aug 22 13:40 [01;32mbundle.js[0m
+-rw-r--r--    1 cjharries cjharries       0 May 28  2017 .cloud-locale-test.skip
+-rwx------    1 cjharries cjharries  917626 Jun  5  2017 [01;32mdist.zip[0m
+-rwxr-xr-x    1 cjharries cjharries    1007 Aug 19 19:48 [01;32mdl-file.ts[0m
+-rwxr-xr-x    1 cjharries cjharries    6480 Aug 22 13:40 [01;32mindex.html[0m
+lrwxrwxrwx    1 cjharries cjharries      28 May 28  2017 [01;36m.nanorc[0m -> /home/cjharries/.nano/nanorc
+-rwxr-xr-x    1 cjharries cjharries    4590 Sep  9 21:55 [01;32mprism.css[0m
+-rwxr-xr-x    1 cjharries cjharries   19248 Sep  9 21:55 [01;32mprism.js[0m
+-rw-rw-r--    1 cjharries cjharries       0 Dec 31 06:51 typescript
+-rwx------    1 cjharries cjharries    1378 May 28  2017 [01;32mwizardsoftheweb.pro.zip[0m
+-rw-rw-r--    1 cjharries cjharries     116 Dec 12 02:05 .yarnrc
+-rw-rw-r--    1 cjharries cjharries   41290 May 28  2017 .zcompdump
+-r--r--r--    1 cjharries cjharries   92344 May 28  2017 .zcompdump.zwc
+-rw-------    1 cjharries cjharries   12210 Dec 31 06:51 .zhistory
+lrwxrwxrwx    1 cjharries cjharries      39 May 28  2017 [01;36m.zlogin[0m -> /home/cjharries/.zprezto/runcoms/zlogin
+lrwxrwxrwx    1 cjharries cjharries      40 May 28  2017 [01;36m.zlogout[0m -> /home/cjharries/.zprezto/runcoms/zlogout
+-rw-rw-r--    1 cjharries cjharries    4070 May 28  2017 .zpreztorc
+lrwxrwxrwx    1 cjharries cjharries      41 May 28  2017 [01;36m.zprofile[0m -> /home/cjharries/.zprezto/runcoms/zprofile
+lrwxrwxrwx    1 cjharries cjharries      39 May 28  2017 [01;36m.zshenv[0m -> /home/cjharries/.zprezto/runcoms/zshenv
+lrwxrwxrwx    1 cjharries cjharries      38 May 28  2017 [01;36m.zshrc[0m -> /home/cjharries/.zprezto/runcoms/zshrc
+[1m[7m%[27m[1m[0m                                                                                                                                                                                                                                                [0m[27m[24m[J
+[40m[39m [34mcjharries[31m@[32mwizardsoftheweb1[39m [44m[30m[30m ~ [49m[34m[39m
+ [1m[34m❯[39m[0m [K[226C[34m[[32m06:51:47[34m][39m[236D[?1h=[A[A[0m[27m[24m[J
+[40m[39m [34mcjharries[31m@[32mwizardsoftheweb1[39m [44m[30m[30m ~ [49m[34m[39m
+ [1m[34m❯[39m[0m [K[226C[34m[[32m06:51:47[34m][39m[236Deexit[?1l>[A[A[0m[27m[24m[J
+[40m[39m [34mcjharries[31m@[32mwizardsoftheweb1[39m [44m[30m[30m ~ [49m[34m[39m
+ [1m[34m❯[39m[0m exit[K[222C[34m[[32m06:51:52[34m][39m[232D
+
+Script done on Sun 31 Dec 2017 06:51:52 AM UTC
